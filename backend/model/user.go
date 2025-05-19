@@ -1,0 +1,22 @@
+package model
+
+import "time"
+
+type User struct {
+	IDUser       int       `gorm:"primaryKey; autoIncrement; column:id_user" json:"id"`
+	CreateDate   time.Time `gorm:"not null; default:CURRENT_TIMESTAMP; column:create_date"`
+	LastUpdate   time.Time `gorm:"not null; default:CURRENT_TIMESTAMP; column:LastUpdate_date"`
+	FirstName    string    `gorm:"type:varchar(100); not null; column:first_name" json:"name"`
+	LastName     string    `gorm:"type:varchar(100); not null; column:last_name" json:"last_name"`
+	Dni          string    `gorm:"type:varchar(8); not null; column:dni" json:"dni"`
+	Email        string    `gorm:"type:varchar(100); unique; not null; column:email" json:"email"`
+	UserPassword string    `gorm:"type:varchar(100); not null; column:user_password" json:"userpassword"`
+	AccessLevel  string    `gorm:"type:varchar(10); default:'User'; not null; column:access_level" json:"accesslevel"`
+}
+
+// TableName especifica el nombre exacto de la tabla en la base de datos
+func (User) TableName() string {
+	return "users"
+}
+
+type Users []User
