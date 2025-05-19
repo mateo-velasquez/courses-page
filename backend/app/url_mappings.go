@@ -3,15 +3,17 @@ package app
 import (
 	//"project/controller"
 
+	"project/controller"
+
 	log "github.com/sirupsen/logrus"
 )
 
 func mapUrls() {
 	//USER
-	//router.POST("/user", controller.InsertUser)     //check
-	//router.GET("/users", controller.GetUsers)       //check
-	//router.GET("/user/:id", controller.GetUserById) //check
-	//router.POST("/login", controller.UserLogin)     //check
+	router.POST("/user", controller.InsertUser)     //check
+	router.GET("/users", controller.GetUsers)       //check
+	router.GET("/user/:id", controller.GetUserById) //check
+	router.POST("/login", controller.UserLogin)     //check
 
 	//IMAGE
 	//router.POST("/course/image", controller.InsertImage)
@@ -36,9 +38,9 @@ func mapUrls() {
 	//router.PUT("/subscription/comment/:id", controller.PutComment)
 
 	//CATEGORY
-	//router.POST("/category", controller.InsertCategory)     //check
-	//router.GET("/category/:id", controller.GetCategoryById) //check PERO TOMARLO CON PINZAS
-	//router.GET("/categories", controller.GetCategories)     //check
+	router.POST("/category", controller.InsertCategory)     //check
+	router.GET("/category/:id", controller.GetCategoryById) //check PERO TOMARLO CON PINZAS
+	router.GET("/categories", controller.GetCategories)     //check
 
 	log.Info("Finishing mappings configurations")
 }
