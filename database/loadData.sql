@@ -1,8 +1,41 @@
--- Cargamos algunos usuarios
+-- Load data into the users table
 INSERT INTO users (name, last_name, dni, email, user_password, access_level) VALUES
 ('Mateo', 'Veda', '45407199', '2214715@ucc.edu.ar', '$2a$10$rj4xjdzIu/Gcw3JViJDnneDl7t1U6sQi0bYq1hpY/9t25WIMSg53q', 'Admin'), -- Password: admin
 ('Tobias', 'Nicolás', '45496307', '2215878@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'Admin'), -- Password: pass
-('Agustina', 'Perez', '44789625', '2201488@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'); -- Password: pass
+('Agustina', 'Perez', '44789625', '2201488@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'), -- Password: pass
+('Nicolás', 'Rojas', '44963856', '2215886@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Francisco', 'Locascio', '46892456', '2522273@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Tiziano Agustín', 'Nicolás', '45894256', '2407889@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Leonardo Tomás', 'Mendez Rodríguez', '45123785', '2108727@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Julián', 'Riera', '44781578', '2221439@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Juan Pablo', 'Schmitt Perotti', '44999856', '2202819@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Francisco', 'Taurian', '46002351', '2318870@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Facundo', 'Zitto', '45174747', '2202975@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
+('Julieta Belén', 'Cavestri Llanos', '45639369', '2217460@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User');
+
+
+
+
+
+
+users – tabla independiente
+
+images – tabla independiente
+
+categories – tabla independiente
+
+courses – depende de images
+
+subscriptions – depende de users y courses
+
+files – depende de users y courses
+
+course_categories – tabla puente: depende de courses y categories
+
+
+
+
+-- Cargamos algunos usuarios
 
 -- Creamos algunas categorías
 INSERT INTO category (category_name) VALUES
