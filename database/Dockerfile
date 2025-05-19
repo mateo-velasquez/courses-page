@@ -1,4 +1,4 @@
 FROM mysql:8
 
-ADD inicio.sql /docker-entrypoint-initdb.d
-ADD inicio2.sql /docker-entrypoint-initdb.d
+ADD createTables.sql /docker-entrypoint-initdb.d
+ADD loadData.sql /docker-entrypoint-initdb.d

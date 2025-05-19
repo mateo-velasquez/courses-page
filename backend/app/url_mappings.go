@@ -1,8 +1,6 @@
 package app
 
 import (
-	//"project/controller"
-
 	"project/controller"
 
 	log "github.com/sirupsen/logrus"
