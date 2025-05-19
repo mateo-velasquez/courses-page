@@ -1,5 +1,5 @@
 -- Load data into the users table
-INSERT INTO users (name, last_name, dni, email, user_password, access_level) VALUES
+INSERT INTO users (first_name, last_name, dni, email, user_password, access_level) VALUES
 ('Mateo', 'Veda', '45407199', '2214715@ucc.edu.ar', '$2a$10$rj4xjdzIu/Gcw3JViJDnneDl7t1U6sQi0bYq1hpY/9t25WIMSg53q', 'Admin'), -- Password: admin
 ('Tobias', 'Nicolás', '45496307', '2215878@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'Admin'), -- Password: pass
 ('Agustina', 'Perez', '44789625', '2201488@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'), -- Password: pass
@@ -13,47 +13,7 @@ INSERT INTO users (name, last_name, dni, email, user_password, access_level) VAL
 ('Facundo', 'Zitto', '45174747', '2202975@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
 ('Julieta Belén', 'Cavestri Llanos', '45639369', '2217460@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User');
 
-
-
-
-
-
-users – tabla independiente
-
-images – tabla independiente
-
-categories – tabla independiente
-
-courses – depende de images
-
-subscriptions – depende de users y courses
-
-files – depende de users y courses
-
-course_categories – tabla puente: depende de courses y categories
-
-
-
-
--- Cargamos algunos usuarios
-
--- Creamos algunas categorías
-INSERT INTO category (category_name) VALUES
-('Panadería'), 
-('Pastelería'), 
-('Carnes'),
-('Vegetariano'),
-('Comida China'),
-('Sushi'),
-('Pescado'),
-('Pastas'),
-('Cómida rápida'),
-('Ensaladas'),
-('Proteico'),
-('Saludable'),
-('Desayunos');
-
--- Insertamos las imagenes cargadas en la carpeta de back
+-- Load data into the images table
 INSERT INTO images (image_path) VALUES
 ('images/Image-1'),
 ('images/Image-2'),
@@ -75,34 +35,199 @@ INSERT INTO images (image_path) VALUES
 ('images/Image-18'),
 ('images/Image-19'),
 ('images/Image-20'),
-('images/Image-21');
+('images/Image-21'),
+('images/Image-22'),
+('images/Image-23'),
+('images/Image-24'),
+('images/Image-25'),
+('images/Image-26'),
+('images/Image-27'),
+('images/Image-28'),
+('images/Image-29'),
+('images/Image-30'),
+('images/Image-31'),
+('images/Image-32'),
+('images/Image-33'),
+('images/Image-34'),
+('images/Image-35'),
+('images/Image-36');
 
--- Inserción de cursos (formato de fecha corregido a YYYY-MM-DD)
-INSERT INTO course (id_image, course_name, price, init_date, description, duration) VALUES 
-(1, 'Introducción a los cortes finos', 45.99, '2025-01-16', 'Este es un curso que abre puertas para todo público interesado en la cocina básica de cortes de carne', '6 meses'),
-(2,'Introducción a los desayunos saludables',36.99,'2025-07-24','Este va a ser un curso que te va a enseñar la importancia de comer saludablemente','4 meses'),
-(3,'Introducción a los cortes para Horno',45.99,'2025-06-20','En este curso aprenderas la importancia de las temperaturas según los cortes necesarios a usar en el horno','6 meses'),
-(4,'Pasta Vegana Avanzada',72.99,'2025-02-27','Chiques, en este curso aprenderan las mejores técnicas para preparar pastas balanceadas, sabrosas y libres de carne','8 meses'),
-(5,'Pasta Italiana Intermedia',36.99,'2025-05-09','Este curso es para aquellos con espíritu de Leones, pero manos de doncellas, que sean capaces de replicar los mejores platillos que tiene Italia','6 meses');
+-- Load data into the categories table
+INSERT INTO categories (category_name) VALUES
+('Panadería'),
+('Pastelería'),
+('Carnes'),
+('Vegetariano'),
+('Comida China'),
+('Sushi'),
+('Pescado'),
+('Pastas'),
+('Comida rápida'),
+('Ensaladas'),
+('Proteico'),
+('Saludable'),
+('Desayunos'),
+('Comida Mexicana'),
+('Comida Italiana'),
+('Comida Francesa'),
+('Comida Árabe'),
+('Comida India'),
+('Comida Japonesa'),
+('Comida Mediterránea'),
+('Comida Tailandesa'),
+('Comida Peruana'),
+('Comida Argentina'),
+('Comida Vegana'),
+('Cocina sin gluten'),
+('Cocina Keto'),
+('Cocina para diabéticos'),
+('Cocina al vapor'),
+('Cocina al horno'),
+('Cocina a la parrilla'),
+('Cocina rápida y fácil'),
+('Cocina gourmet'),
+('Cocina económica'),
+('Platos fríos'),
+('Platos calientes'),
+('Snacks y bocadillos'),
+('Sopas y caldos'),
+('Guisos y estofados'),
+('Mariscos'),
+('Cocina navideña'),
+('Cocina para niños'),
+('Cocina fitness'),
+('Cocina casera'),
+('Cocina de autor'),
+('Cocina tradicional'),
+('Cocina fusión'),
+('Cocina regional'),
+('Cocina internacional'),
+('Batidos y smoothies'),
+('Postres frutales');
 
--- Relación curso-categoría
-INSERT INTO course_category(id_course, id_category) VALUES
-(1,3),
-(2,11),
-(2,12),
-(2,13),
-(3,3),
-(3,11),
-(3,12),
-(4,4),
-(4,8),
-(5,8);
+-- Load data into the courses table
+INSERT INTO courses (id_image, course_name, price, init_date, course_description, duration) VALUES
+(22, 'Cocina Árabe Avanzado', 91.27, '2025-08-27', 'Curso de cocina dedicado a Cocina Árabe (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(16, 'Carnes Avanzado', 66.92, '2025-07-18', 'Curso de cocina dedicado a Carnes (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
+(7, 'Sin TACC Principiante', 40.75, '2025-03-10', 'Curso de cocina dedicado a Sin TACC (Principiante), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(2, 'Saludable Principiante', 45.42, '2025-10-06', 'Curso de cocina dedicado a Saludable (Principiante), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(20, 'Cocina Fusión Principiante', 99.49, '2025-08-27', 'Curso de cocina dedicado a Cocina Fusión (Principiante), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(31, 'Pescado Intermedio', 45.03, '2025-10-17', 'Curso de cocina dedicado a Pescado (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(20, 'Comida India Principiante', 95.84, '2025-07-14', 'Curso de cocina dedicado a Comida India (Principiante), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
+(15, 'Repostería Creativa Avanzado', 30.42, '2025-02-12', 'Curso de cocina dedicado a Repostería Creativa (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(4, 'Vegetariano Intermedio', 90.89, '2025-04-06', 'Curso de cocina dedicado a Vegetariano (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(23, 'Comida China Avanzado', 40.18, '2025-06-15', 'Curso de cocina dedicado a Comida China (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(24, 'Snacks Principiante', 56.62, '2025-10-17', 'Curso de cocina dedicado a Snacks (Principiante), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(2, 'Desayunos Avanzado', 62.45, '2025-01-07', 'Curso de cocina dedicado a Desayunos (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(5, 'Cocina Peruana Intermedio', 95.56, '2025-07-19', 'Curso de cocina dedicado a Cocina Peruana (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(4, 'Comida Francesa Intermedio', 71.82, '2025-12-02', 'Curso de cocina dedicado a Comida Francesa (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(30, 'Pescado Avanzado', 56.42, '2025-03-02', 'Curso de cocina dedicado a Pescado (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(34, 'Comida Mexicana Intermedio', 91.31, '2025-07-25', 'Curso de cocina dedicado a Comida Mexicana (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(35, 'Carnes Intermedio', 92.31, '2025-06-22', 'Curso de cocina dedicado a Carnes (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(18, 'Comida Francesa Avanzado', 44.91, '2025-10-26', 'Curso de cocina dedicado a Comida Francesa (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(21, 'Sushi Avanzado', 54.52, '2025-04-30', 'Curso de cocina dedicado a Sushi (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(33, 'Postres Intermedio', 69.68, '2025-10-20', 'Curso de cocina dedicado a Postres (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(29, 'Pastas Avanzado', 81.91, '2025-09-13', 'Curso de cocina dedicado a Pastas (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(14, 'Panadería Avanzado', 89.3, '2025-11-14', 'Curso de cocina dedicado a Panadería (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
+(12, 'Pastelería Intermedio', 64.48, '2025-06-18', 'Curso de cocina dedicado a Pastelería (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(8, 'Ensaladas Principiante', 93.18, '2025-01-03', 'Curso de cocina dedicado a Ensaladas (Principiante), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(15, 'Repostería Creativa Intermedio', 67.5, '2025-06-18', 'Curso de cocina dedicado a Repostería Creativa (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(6, 'Dulces Intermedio', 91.59, '2025-04-03', 'Curso de cocina dedicado a Dulces (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(20, 'Comida India Intermedio', 74.13, '2025-06-09', 'Curso de cocina dedicado a Comida India (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(3, 'Proteico Intermedio', 49.25, '2025-10-13', 'Curso de cocina dedicado a Proteico (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(34, 'Comida Mexicana Avanzado', 83.62, '2025-03-20', 'Curso de cocina dedicado a Comida Mexicana (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(9, 'Sin TACC Intermedio', 91.85, '2025-10-18', 'Curso de cocina dedicado a Sin TACC (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(2, 'Cocina Fusión Intermedio', 86.57, '2025-10-10', 'Curso de cocina dedicado a Cocina Fusión (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(22, 'Cocina Árabe Principiante', 89.61, '2025-10-30', 'Curso de cocina dedicado a Cocina Árabe (Principiante), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(30, 'Pescado Principiante', 34.55, '2025-08-20', 'Curso de cocina dedicado a Pescado (Principiante), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(4, 'Vegetariano Avanzado', 84.96, '2025-05-24', 'Curso de cocina dedicado a Vegetariano (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
+(5, 'Snacks Avanzado', 76.74, '2025-01-28', 'Curso de cocina dedicado a Snacks (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
+(6, 'Dulces Avanzado', 67.69, '2025-07-22', 'Curso de cocina dedicado a Dulces (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(22, 'Cocina Fusión Avanzado', 72.24, '2025-04-08', 'Curso de cocina dedicado a Cocina Fusión (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(22, 'Comida India Avanzado', 68.35, '2025-06-06', 'Curso de cocina dedicado a Comida India (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(6, 'Postres Principiante', 39.94, '2025-05-03', 'Curso de cocina dedicado a Postres (Principiante), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
+(2, 'Desayunos Intermedio', 74.28, '2025-11-21', 'Curso de cocina dedicado a Desayunos (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
+(15, 'Pastelería Avanzado', 73.01, '2025-07-26', 'Curso de cocina dedicado a Pastelería (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
+(25, 'Cocina Peruana Principiante', 72.18, '2025-08-16', 'Curso de cocina dedicado a Cocina Peruana (Principiante), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(21, 'Sushi Intermedio', 49.7, '2025-06-03', 'Curso de cocina dedicado a Sushi (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(4, 'Saludable Intermedio', 68.31, '2025-04-29', 'Curso de cocina dedicado a Saludable (Intermedio), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(14, 'Panadería Principiante', 60.7, '2025-07-04', 'Curso de cocina dedicado a Panadería (Principiante), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(16, 'Proteico Avanzado', 73.68, '2025-06-29', 'Curso de cocina dedicado a Proteico (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '6 meses'),
+(26, 'Comida China Principiante', 83.93, '2025-04-07', 'Curso de cocina dedicado a Comida China (Principiante), ideal para quienes quieren mejorar sus habilidades.', '8 meses');
 
--- Inserción de las Subscripciones
-INSERT INTO subscription (id_course, id_user) VALUES
-(1,3),
-(1,1),
-(2,3),
-(3,3),
-(4,3),
-(5,3);
+-- Load data into the course_categories table
+INSERT INTO course_categories(id_course, id_category) VALUES
+(1, 17), (1, 44), (1, 45),
+(2, 3), (2, 11), (2, 30),
+(3, 25), (3, 27), (3, 12),
+(4, 12), (4, 42), (4, 26),
+(5, 46), (5, 48), (5, 32),
+(6, 7), (6, 39), (6, 20),
+(7, 18), (7, 42), (7, 35),
+(8, 2), (8, 50), (8, 44),
+(9, 4), (9, 12), (9, 24),
+(10, 5), (10, 35), (10, 48),
+(11, 36), (11, 41),
+(12, 13), (12, 49),
+(13, 22), (13, 46), (13, 38),
+(14, 16), (14, 32),
+(15, 7), (15, 39), (15, 29),
+(16, 14), (16, 35), (16, 47),
+(17, 3), (17, 11),
+(18, 16), (18, 32), (18, 45),
+(19, 6), (19, 19), (19, 20),
+(20, 2), (20, 50), (20, 16),
+(21, 8), (21, 15), (21, 35),
+(22, 1), (22, 33),
+(23, 2), (23, 15),
+(24, 10), (24, 12), (24, 24),
+(25, 2), (25, 50),
+(26, 2), (26, 50), (26, 33),
+(27, 18), (27, 11), (27, 12),
+(28, 11), (28, 12), (28, 26),
+(29, 14), (29, 31), (29, 9),
+(30, 25), (30, 27), (30, 33),
+(31, 46), (31, 32), (31, 12),
+(32, 17), (32, 44),
+(33, 7), (33, 20),
+(34, 4), (34, 24), (34, 12),
+(35, 36), (35, 9),
+(36, 2), (36, 50), (36, 13),
+(37, 46), (37, 32), (37, 48),
+(38, 18), (38, 42), (38, 12),
+(39, 2), (39, 50), (39, 13),
+(40, 13), (40, 49), (40, 12),
+(41, 2), (41, 50), (41, 32), (41, 43),
+(42, 22), (42, 47), (42, 38),
+(43, 6), (43, 7), (43, 19), (43, 48),
+(44, 12), (44, 41), (44, 42),
+(45, 1), (45, 33), (45, 45),
+(46, 11), (46, 42), (46, 26),
+(47, 5), (47, 34), (47, 35);
+
+-- Load data into the subscriptions table
+INSERT INTO subscriptions (id_course, id_user) VALUES
+(27,3),(41,8),(3,9),(10,11),(33,6),(15,12),(22,4),(9,3),(5,7),(47,10),
+(38,5),(6,7),(21,11),(11,9),(2,8),(44,12),(1,6),(13,3),(8,4),(29,5),
+(17,9),(25,12),(7,10),(39,3),(16,7),(14,6),(4,11),(20,3),(26,8),(31,5),
+(35,12),(43,4),(18,10),(28,7),(23,6),(12,5),(19,9),(36,8),(34,3),(30,7),
+(40,11),(24,4),(42,9),(37,12),(32,6),(45,5),(46,3),(48,8),(1,7),(10,9),
+(7,6),(21,12),(16,3),(11,10),(2,7),(5,4),(14,9),(33,5),(25,11),(38,8),
+(17,3),(29,12),(6,10),(20,7),(9,4),(31,6),(15,8),(39,3),(44,5),(26,11),
+(3,7),(12,4),(43,9),(22,12),(40,8),(18,3),(35,10),(8,7),(41,5),(13,11),
+(19,6),(34,12),(30,9),(24,7),(37,4),(45,3),(46,8),(1,10),(10,5),(7,9),
+(21,6),(16,3),(11,12),(2,7),(5,4),(14,9),(33,5),(25,11),(38,8),(17,3),
+(29,12),(6,10),(20,7),(9,4),(31,6),(15,8),(39,3),(44,5),(26,11),(3,7),
+(12,4),(43,9),(22,12),(40,8),(18,3),(35,10),(8,7),(41,5),(13,11),(19,6),
+(34,12),(30,9),(24,7),(37,4),(45,3),(46,8),(1,10),(10,5),(7,9),(21,6),
+(16,3),(11,12),(2,7),(5,4),(14,9),(33,5),(25,11),(38,8),(17,3),(29,12),
+(6,10),(20,7),(9,4),(31,6),(15,8),(39,3),(44,5),(26,11),(3,7),(12,4),
+(43,9),(22,12),(40,8),(18,3),(35,10),(8,7),(41,5),(13,11),(19,6),(34,12),
+(30,9),(24,7),(37,4),(45,3),(46,8),(1,10),(10,5),(7,9),(21,6),(16,3),
+(11,12),(2,7),(5,4),(14,9),(33,5),(25,11),(38,8),(17,3),(29,12),(6,10),
+(20,7),(9,4),(31,6),(15,8),(39,3),(44,5),(26,11),(3,7),(12,4),(43,9),
+(22,12),(40,8),(18,3),(35,10),(8,7),(41,5),(13,11),(19,6),(34,12),(30,9),
+(24,7),(37,4),(45,3),(46,8),(1,10),(10,5),(7,9),(21,6),(16,3),(11,12);
+
+
+-- Load data into the files table
