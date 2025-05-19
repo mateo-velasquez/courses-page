@@ -16,7 +16,7 @@ The object-oriented structure of the system was modeled, detailing classes, attr
 ### 🧩 Entity-Relationship Design  
 The entity-relationship design was created, defining entities, attributes, and relationships needed for proper data organization:
 
-![Entity-Relationship Design](./database/diagrams/DiseñoEntidad-Relacion.jpg)
+![Entity-Relationship-Design](./database/diagrams/DiseñoEntidad-Relacion.jpg)
 
 ---
 
