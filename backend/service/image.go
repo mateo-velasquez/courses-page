@@ -43,6 +43,10 @@ func (s *imageService) GetImageById(id int) (dto.ImageDTO, error) {
 		return imageDTO, errors.New("image not found")
 	}
 
+	if image.IDImage < 0 {
+		return imageDTO, errors.New("wrong ID")
+	}
+
 	imageDTO.IDImage = image.IDImage
 	imageDTO.ImagePath = image.ImagePath
 
