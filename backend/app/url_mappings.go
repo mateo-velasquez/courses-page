@@ -20,7 +20,7 @@ func mapUrls() {
 
 	//COURSE
 	router.GET("/course/:id", controller.GetCourseById)
-	router.GET("/courses", controller.GetCourses) //check
+	router.GET("/courses", controller.GetCourses)
 	router.GET("/search/:name", controller.GetCoursesByName)
 	router.POST("/course", controller.InsertCourse)
 	router.PUT("/course/:id", controller.PutCourseById)
