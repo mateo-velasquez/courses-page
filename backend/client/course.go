@@ -9,7 +9,7 @@ import (
 func GetCourseById(id int) model.Course {
 	var course model.Course
 
-	Db.Where("id_course", id).First(&course)
+	Db.Where("id_course = ?", id).Preload("Categories").First(&course)
 	log.Debug("Course: ", course)
 
 	return course
@@ -17,7 +17,7 @@ func GetCourseById(id int) model.Course {
 
 func GetCourses() model.Courses {
 	var courses model.Courses
-	Db.Find(&courses)
+	Db.Preload("Categories").Find(&courses)
 
 	log.Debug("Courses: ", courses)
 
