@@ -14,9 +14,9 @@ func mapUrls() {
 	router.POST("/login", controller.UserLogin)     //check
 
 	//IMAGE
-	//router.POST("/course/image", controller.InsertImage)
-	//router.GET("/course/image/id", controller.GetImageById)
-	//router.GET("/images", controller.GetImages) //check
+	router.POST("/course/image", controller.InsertImage)
+	router.GET("/course/image/id", controller.GetImageById)
+	router.GET("/images", controller.GetImages) //check
 
 	//COURSE
 	//router.GET("/course/:id", controller.GetCourseById)
