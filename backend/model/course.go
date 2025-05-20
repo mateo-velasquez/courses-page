@@ -15,7 +15,7 @@ type Course struct {
 	Description string     `gorm:"column:course_description;type:varchar(1000)"`
 	Duration    string     `gorm:"column:duration;type:varchar(100);not null"`
 	Rating      float64    `gorm:"column:rating;type:decimal(3,2);not null"`
-	Categories  Categories `gorm:"many2many:course_categories;"`
+	Categories  Categories `gorm:"many2many:course_categories;joinForeignKey:IDCourse;joinReferences:IDCategory"`
 }
 
 // TableName especifica el nombre exacto de la tabla en la base de datos
