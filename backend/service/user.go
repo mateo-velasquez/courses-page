@@ -36,7 +36,7 @@ func (s *userService) InsertUser(userDTO dto.UserDTO) (dto.UserDTO, error) {
 	}
 
 	// Registramos los datos del dto en el user (model)
-	user.LastName = userDTO.LastName
+	user.FirstName = userDTO.FirstName
 	user.LastName = userDTO.LastName
 	user.Dni = userDTO.Dni
 	user.Email = userDTO.Email
@@ -68,7 +68,7 @@ func (s *userService) GetUsers() (dto.UsersDTO, error) {
 		userDTO.IDUser = user.IDUser
 		userDTO.Dni = user.Dni
 		userDTO.Email = user.Email
-		userDTO.LastName = user.LastName
+		userDTO.FirstName = user.FirstName
 		userDTO.LastName = user.LastName
 		userDTO.UserPassword = user.UserPassword
 		userDTO.AccessLevel = user.AccessLevel
@@ -96,7 +96,7 @@ func (s *userService) GetUserById(id int) (dto.UserDTO, error) {
 	userDTO.IDUser = user.IDUser
 	userDTO.Dni = user.Dni
 	userDTO.Email = user.Email
-	userDTO.LastName = user.LastName
+	userDTO.FirstName = user.FirstName
 	userDTO.LastName = user.LastName
 	userDTO.UserPassword = user.UserPassword
 	userDTO.AccessLevel = user.AccessLevel
@@ -117,7 +117,7 @@ func (s *userService) GetUserByEmail(email string) (dto.UserDTO, error) {
 	userDTO.IDUser = user.IDUser
 	userDTO.Dni = user.Dni
 	userDTO.Email = user.Email
-	userDTO.LastName = user.LastName
+	userDTO.FirstName = user.FirstName
 	userDTO.LastName = user.LastName
 	userDTO.UserPassword = user.UserPassword
 	userDTO.AccessLevel = user.AccessLevel
@@ -146,7 +146,7 @@ func (s *userService) UserLogin(userDTO dto.UserDTO) (dto.UserDTO, error) {
 	userDTO.Email = user.Email
 	userDTO.UserPassword = user.UserPassword
 	userDTO.Dni = user.Dni
-	userDTO.LastName = user.LastName
+	userDTO.FirstName = user.FirstName
 	userDTO.LastName = user.LastName
 	userDTO.AccessLevel = user.AccessLevel
 

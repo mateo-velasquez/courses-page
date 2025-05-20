@@ -12,7 +12,7 @@ func InsertCategory(category model.Category) model.Category {
 	Db.Where("category_name = ?", category.CategoryName).First(&categoryaux)
 
 	if categoryaux.IDCategory != 0 {
-		log.Error("Email used before")
+		log.Error("This category already exists")
 		categoryaux.CategoryName = ""
 		return categoryaux
 	}
@@ -24,7 +24,7 @@ func InsertCategory(category model.Category) model.Category {
 		return category
 	}
 
-	log.Debug("Category, created", category.IDCategory)
+	log.Debug("Category, created: ", category.IDCategory)
 	return category
 }
 
