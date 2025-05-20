@@ -7,7 +7,7 @@ type Category struct {
 
 // TableName especifica el nombre exacto de la tabla en la base de datos
 func (Category) TableName() string {
-	return "category"
+	return "categories"
 }
 
 type Categories []Category

@@ -52,8 +52,8 @@ func StartDbEngine() {
 	// We need to migrate all classes model.
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Image{})
-	db.AutoMigrate(&model.Category{})
 	db.AutoMigrate(&model.Course{})
+	db.AutoMigrate(&model.Category{})
 	db.AutoMigrate(&model.Subscription{})
 
 	log.Info("Finishing Migration Database Tables")
