@@ -14,17 +14,17 @@ func mapUrls() {
 	router.POST("/login", controller.UserLogin)     //check
 
 	//IMAGE
-	router.POST("/course/image", controller.InsertImage) // Este que sea para guardar una relación de imagen con curso
+	router.POST("/course/image", controller.InsertImage) // Este que sea para guardar una relación de imagen con curso // no check
 	router.GET("/image/:id", controller.GetImageById)    //check
 	router.GET("/images", controller.GetImages)          //check
 
 	//COURSE
-	router.GET("/course/:id", controller.GetCourseById)
-	router.GET("/courses", controller.GetCourses)
-	router.GET("/search/:name", controller.GetCoursesByName)
-	router.POST("/course", controller.InsertCourse)
-	router.PUT("/course/:id", controller.PutCourseById)
-	router.DELETE("/course/:id", controller.DeleteCourseById)
+	router.GET("/course/:id", controller.GetCourseById)       // check
+	router.GET("/courses", controller.GetCourses)             // check
+	router.GET("/search/:name", controller.GetCoursesByName)  //fail
+	router.POST("/course", controller.InsertCourse)           //fail
+	router.PUT("/course/:id", controller.PutCourseById)       //fail
+	router.DELETE("/course/:id", controller.DeleteCourseById) //fail
 
 	//SUBSCRIPTION
 	//router.POST("/subscription", controller.InsertSuscription)

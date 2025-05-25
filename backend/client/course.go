@@ -29,6 +29,15 @@ func GetCourses() model.Courses {
 	var courses model.Courses
 	Db.Preload("Categories").Find(&courses)
 
+	for i := range courses {
+		var categories model.Categories
+		Db.Table("categories").
+			Joins("JOIN course_categories ON course_categories.category_id = categories.category_id").
+			Where("course_categories.course_id = ?", courses[i].IDCourse).
+			Scan(&categories)
+		courses[i].Categories = categories
+	}
+
 	log.Debug("Courses: ", courses)
 
 	return courses
@@ -37,8 +46,8 @@ func GetCourses() model.Courses {
 func GetCoursesByName(name string) model.Courses {
 	var courses model.Courses
 
-	Db.Where("name LIKE ?", "%"+name+"%").Find(&courses)
-	log.Debug("Users: ", courses)
+	Db.Where("course_name LIKE ?", "%"+name+"%").Find(&courses)
+	log.Debug("Courses: ", courses)
 
 	return courses
 }
