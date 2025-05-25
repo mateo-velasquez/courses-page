@@ -52,6 +52,19 @@ func GetCoursesByName(c *gin.Context) {
 	c.JSON(http.StatusOK, courses)
 }
 
+//func GetCoursesByNameAndCategory(c *gin.Context) {
+//	name := c.Query("name")
+//	categories := c.Query("categories")
+//
+//	courses, err := service.CourseService.GetCoursesByNameAndCategory(name, categories)
+//	if err != nil {
+//		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+//		return
+//	}
+//
+//	c.JSON(http.StatusOK, courses)
+//}
+
 func InsertCourse(c *gin.Context) {
 	var courseDto dto.CourseDTO
 
@@ -87,7 +100,7 @@ func PutCourseById(c *gin.Context) {
 
 	courseDto.IDCourse = id
 
-	courseDto, er := service.CourseService.InsertCourse(courseDto)
+	courseDto, er := service.CourseService.PutCourseById(courseDto)
 
 	if er != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": er.Error()})

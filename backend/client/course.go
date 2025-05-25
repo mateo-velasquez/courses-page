@@ -27,7 +27,7 @@ func GetCourseById(id int) model.Course {
 
 func GetCourses() model.Courses {
 	var courses model.Courses
-	Db.Preload("Categories").Find(&courses)
+	Db.Find(&courses)
 
 	for i := range courses {
 		var categories model.Categories
@@ -47,6 +47,16 @@ func GetCoursesByName(name string) model.Courses {
 	var courses model.Courses
 
 	Db.Where("course_name LIKE ?", "%"+name+"%").Find(&courses)
+
+	for i := range courses {
+		var categories model.Categories
+		Db.Table("categories").
+			Joins("JOIN course_categories ON course_categories.category_id = categories.category_id").
+			Where("course_categories.course_id = ?", courses[i].IDCourse).
+			Scan(&categories)
+		courses[i].Categories = categories
+	}
+
 	log.Debug("Courses: ", courses)
 
 	return courses
@@ -85,7 +95,7 @@ func PutCourseById(course model.Course) model.Course {
 }
 
 func DeleteCourseById(course model.Course) error {
-	err := Db.Delete(&course).Error
+	err := Db.Debug().Delete(&course).Error
 
 	if err != nil {
 		log.Debug("Failed to delete course")

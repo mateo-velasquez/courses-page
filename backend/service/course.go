@@ -14,6 +14,7 @@ type courseServiceInterface interface {
 	GetCourses() (dto.CoursesDTO, error)
 	GetCourseById(id int) (dto.CourseDTO, error)
 	GetCoursesByName(name string) (dto.CoursesDTO, error)
+	//	GetCoursesByNameAndCategory(name string, categories []string) (dto.CoursesDTO, error)
 	PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	DeleteCourseById(id int) error
 }
@@ -113,6 +114,8 @@ func (s *courseService) GetCoursesByName(name string) (dto.CoursesDTO, error) {
 	return coursesDTO, nil
 }
 
+//func (s *courseService) GetCoursesByNameAndCategory(courseSearchDTO dto.CourseSearchDTO) dto.CoursesDTO
+
 func (s *courseService) InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, error) {
 	var course model.Course
 
@@ -174,7 +177,7 @@ func (s *courseService) PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, e
 
 	course = client.PutCourseById(course)
 
-	if course.IDCourse == 0 {
+	if course.IDCourse < 0 {
 		return courseDTO, errors.New("error creating course")
 	}
 
