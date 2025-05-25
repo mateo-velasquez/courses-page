@@ -142,7 +142,7 @@ func (s *courseService) InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, er
 
 	courseDTO.IDCourse = course.IDCourse
 
-	if course.IDCourse == 0 {
+	if course.IDCourse < 0 {
 		return courseDTO, errors.New("error creating course")
 	}
 

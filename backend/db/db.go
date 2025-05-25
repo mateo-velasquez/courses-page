@@ -55,6 +55,7 @@ func StartDbEngine() {
 	db.AutoMigrate(&model.Course{})
 	db.AutoMigrate(&model.Category{})
 	db.AutoMigrate(&model.Subscription{})
+	db.AutoMigrate(&model.CourseCategories{})
 
 	log.Info("Finishing Migration Database Tables")
 }

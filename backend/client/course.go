@@ -63,11 +63,40 @@ func GetCoursesByName(name string) model.Courses {
 }
 
 func InsertCourse(course model.Course) model.Course {
+	var courseAuxiliar model.Course
+	Db.Where("course_name LIKE ?", "%"+course.CourseName+"%").First(&courseAuxiliar)
+
+	if courseAuxiliar.IDCourse != 0 {
+		log.Error("There is already a course with this name")
+		course.IDCourse = -1
+		return course
+	}
+
 	result := Db.Create(&course)
 
 	if result.Error != nil {
 		log.Error("Failed to insert course.")
 		return course
+	}
+
+	var courseAUX model.Course
+	Db.Where("course_name LIKE ?", "%"+course.CourseName+"%").First(&courseAUX)
+	course.IDCourse = courseAUX.IDCourse
+
+	//Now we are gonna create the relations coursecategories:
+	for _, category := range course.Categories {
+		var categoryAUX model.Category
+		var courseCategories model.CourseCategories
+		categoryAUX = GetCategoryByName(category.CategoryName)
+		courseCategories.IDCourse = course.IDCourse
+		courseCategories.IDCategory = categoryAUX.IDCategory
+		result := InsertCourseCategories(courseCategories)
+
+		if result.IDCourse < 0 {
+			log.Error("Failed to insert relation: (", result.IDCourse, result.IDCategory, ")")
+			course.IDCourse = -1
+			return course
+		}
 	}
 
 	log.Debug("Course created:", course.IDCourse)
