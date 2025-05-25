@@ -31,7 +31,7 @@ func InsertCategory(category model.Category) model.Category {
 func GetCategoryById(id int) model.Category {
 	var category model.Category
 
-	Db.Where("id_category = ?", id).First(&category)
+	Db.Where("category_id = ?", id).First(&category)
 	log.Debug("Category: ", category)
 
 	return category

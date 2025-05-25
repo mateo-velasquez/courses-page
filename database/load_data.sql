@@ -106,7 +106,7 @@ INSERT INTO categories (category_name) VALUES
 ('Postres frutales');
 
 -- Load data into the courses table
-INSERT INTO courses (id_image, course_name, price, init_date, course_description, duration) VALUES
+INSERT INTO courses (image_id, course_name, price, init_date, course_description, duration) VALUES
 (22, 'Cocina arabe Avanzado', 91.27, '2025-08-27', 'Curso de cocina dedicado a Cocina arabe (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '3 meses'),
 (16, 'Carnes Avanzado', 66.92, '2025-07-18', 'Curso de cocina dedicado a Carnes (Avanzado), ideal para quienes quieren mejorar sus habilidades.', '8 meses'),
 (7, 'Sin TACC Principiante', 40.75, '2025-03-10', 'Curso de cocina dedicado a Sin TACC (Principiante), ideal para quienes quieren mejorar sus habilidades.', '4 meses'),
@@ -156,7 +156,7 @@ INSERT INTO courses (id_image, course_name, price, init_date, course_description
 (26, 'Comida China Principiante', 83.93, '2025-04-07', 'Curso de cocina dedicado a Comida China (Principiante), ideal para quienes quieren mejorar sus habilidades.', '8 meses');
 
 -- Load data into the course_categories table
-INSERT INTO course_categories(id_course, id_category) VALUES
+INSERT INTO course_categories(course_id, category_id) VALUES
 (1, 17), (1, 44), (1, 45),
 (2, 3), (2, 11), (2, 30),
 (3, 25), (3, 27), (3, 12),
@@ -206,7 +206,7 @@ INSERT INTO course_categories(id_course, id_category) VALUES
 (47, 5), (47, 34), (47, 35);
 
 -- Load data into the subscriptions table
-INSERT INTO subscriptions(id_course, id_user) VALUES
+INSERT INTO subscriptions(course_id, user_id) VALUES
 (27,3),(41,8),(3,9),(10,11),(33,6),(15,12),(22,4),(9,3),(5,7),(47,10),
 (38,5),(6,7),(21,11),(11,9),(2,8),(44,12),(1,6),(13,3),(8,4),(29,5),
 (17,9),(25,12),(7,10),(39,3),(16,7),(14,6),(4,11),(20,3),(26,8),(31,5),

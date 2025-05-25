@@ -22,7 +22,7 @@ func InsertImage(image model.Image) model.Image {
 func GetImageById(id int) model.Image {
 	var image model.Image
 
-	Db.Where("id_image = ?", id).First(&image)
+	Db.Where("image_id = ?", id).First(&image)
 	log.Debug("Image: ", image)
 
 	return image
@@ -39,7 +39,7 @@ func GetImages() model.Images {
 
 func GetIdMayor() int {
 	var maxID int
-	result := Db.Table("images").Select("MAX(id_image)").Scan(&maxID)
+	result := Db.Table("images").Select("MAX(image_id)").Scan(&maxID)
 
 	if result.Error != nil {
 		log.Error("Failed to retrieve maximum ID")

@@ -9,7 +9,17 @@ import (
 func GetCourseById(id int) model.Course {
 	var course model.Course
 
-	Db.Where("id_course = ?", id).Preload("Categories").First(&course)
+	Db.Where("course_id = ?", id).First(&course)
+	// Aparentemente GORM está generando un JOIN sin la condición ON. Eso rompe completamente la consulta.
+	//Db.Where("course_id = ?", id).Preload("Categories").First(&course)
+	var categories model.Categories
+	Db.Table("categories").
+		Joins("JOIN course_categories ON course_categories.category_id = categories.category_id").
+		Where("course_categories.course_id = ?", id).
+		Scan(&categories)
+
+	course.Categories = categories
+
 	log.Debug("Course: ", course)
 
 	return course
