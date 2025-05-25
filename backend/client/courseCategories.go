@@ -18,3 +18,7 @@ func InsertCourseCategories(relation model.CourseCategories) model.CourseCategor
 	log.Debug("Relation created:", relation.IDCourse, relation.IDCategory)
 	return relation
 }
+
+//func DeleteRelationsByCourseID(id int) model.CourseCategories {
+//
+//}

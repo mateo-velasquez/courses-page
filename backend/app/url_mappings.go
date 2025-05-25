@@ -23,9 +23,9 @@ func mapUrls() {
 	router.GET("/courses", controller.GetCourses)       //check
 	//router.GET("/search", controller.GetCoursesByNameAndCategory)
 	router.GET("/search/:name", controller.GetCoursesByName)  //fail (No quiero implementar la búsqueda hasta que no corrija el CRUD)
-	router.POST("/course", controller.InsertCourse)           //semi fail (no guarda las relaciones de las categorias)
+	router.POST("/course", controller.InsertCourse)           //check
 	router.PUT("/course/:id", controller.PutCourseById)       //fail (me da un 500)
-	router.DELETE("/course/:id", controller.DeleteCourseById) //fail (borra todos los cursos en lugar de uno sólo. raro)
+	router.DELETE("/course/:id", controller.DeleteCourseById) //check
 
 	//SUBSCRIPTION
 	//router.POST("/subscription", controller.InsertSuscription)

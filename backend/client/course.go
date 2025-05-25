@@ -124,7 +124,7 @@ func PutCourseById(course model.Course) model.Course {
 }
 
 func DeleteCourseById(course model.Course) error {
-	err := Db.Debug().Delete(&course).Error
+	err := Db.Debug().Where("course_id = ?", course.IDCourse).Delete(&course).Error
 
 	if err != nil {
 		log.Debug("Failed to delete course")

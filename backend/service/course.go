@@ -187,7 +187,7 @@ func (s *courseService) PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, e
 func (s *courseService) DeleteCourseById(id int) error {
 	course := client.GetCourseById(id)
 
-	if course.IDCourse == 0 {
+	if course.IDCourse <= 0 {
 		return errors.New("course not found")
 	}
 
