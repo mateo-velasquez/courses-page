@@ -24,7 +24,7 @@ func mapUrls() {
 	//router.GET("/search", controller.GetCoursesByNameAndCategory)
 	router.GET("/search/:name", controller.GetCoursesByName)  //fail (No quiero implementar la búsqueda hasta que no corrija el CRUD)
 	router.POST("/course", controller.InsertCourse)           //check
-	router.PUT("/course/:id", controller.PutCourseById)       //fail (me da un 500)
+	router.PUT("/course/:id", controller.PutCourseById)       //check
 	router.DELETE("/course/:id", controller.DeleteCourseById) //check
 
 	//SUBSCRIPTION
@@ -38,7 +38,7 @@ func mapUrls() {
 
 	//CATEGORY
 	router.POST("/category", controller.InsertCategory)     //check
-	router.GET("/category/:id", controller.GetCategoryById) //check PERO TOMARLO CON PINZAS
+	router.GET("/category/:id", controller.GetCategoryById) //check
 	router.GET("/categories", controller.GetCategories)     //check
 
 	//FILES

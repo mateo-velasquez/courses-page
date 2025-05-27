@@ -16,12 +16,7 @@ type Course struct {
 	Duration    string    `gorm:"column:duration;type:varchar(100);not null"`
 	Rating      float64   `gorm:"column:rating;type:decimal(3,2);not null"`
 	Categories  Categories
-	//Categories  Categories `gorm:"many2many:course_categories;foreignKey:CourseID;joinForeignKey:course_id;References:CategoryID;joinReferences:category_id"`
 	//Categories  Categories `gorm:"many2many:course_categories"`
-	//Categories  Categories `gorm:"many2many:course_categories;joinForeignKey:IDCourse"`
-	//Categories Categories `gorm:"many2many:course_categories;foreignKey:IDCourse;joinForeignKey:IDCourse;joinReferences:IDCategory"`
-	// Error: Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE (`course_categories`.`course_id_course` IN (?))' at line 1
-	//Categories []Category `gorm:"many2many:course_categories;joinForeignKey:IDCourse;joinReferences:IDCategory;foreignKey:IDCourse;references:IDCategory"`
 }
 
 type Courses []Course

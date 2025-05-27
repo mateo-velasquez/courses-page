@@ -39,6 +39,7 @@ func (s *courseService) GetCourseById(id int) (dto.CourseDTO, error) {
 		return courseDTO, errors.New("course not found")
 	}
 
+	// I need to pass the data from the DTO to the DAO
 	courseDTO.IDCourse = course.IDCourse
 	courseDTO.IDImage = course.IDImage
 	courseDTO.CourseName = course.CourseName
@@ -61,6 +62,7 @@ func (s *courseService) GetCourses() (dto.CoursesDTO, error) {
 	for _, course := range courses {
 		var courseDTO dto.CourseDTO
 
+		// I need to pass the data from the DTO to the DAO
 		courseDTO.IDCourse = course.IDCourse
 		courseDTO.IDImage = course.IDImage
 		courseDTO.CourseName = course.CourseName
@@ -85,6 +87,7 @@ func (s *courseService) GetCoursesByName(name string) (dto.CoursesDTO, error) {
 	var courses model.Courses
 	var coursesDTO dto.CoursesDTO
 
+	// If the name is empty, don't bother searching.
 	if name == "" {
 		return coursesDTO, errors.New("name not found")
 	}
@@ -94,6 +97,7 @@ func (s *courseService) GetCoursesByName(name string) (dto.CoursesDTO, error) {
 	for _, course := range courses {
 		var courseDTO dto.CourseDTO
 
+		// I need to pass the data from the DTO to the DAO
 		courseDTO.IDCourse = course.IDCourse
 		courseDTO.IDImage = course.IDImage
 		courseDTO.CourseName = course.CourseName
@@ -119,6 +123,7 @@ func (s *courseService) GetCoursesByName(name string) (dto.CoursesDTO, error) {
 func (s *courseService) InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, error) {
 	var course model.Course
 
+	// I need to pass the data from the DTO to the DAO
 	course.IDImage = courseDTO.IDImage
 	course.CourseName = courseDTO.CourseName
 	course.Description = courseDTO.Description
@@ -151,11 +156,27 @@ func (s *courseService) InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, er
 
 func (s *courseService) PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error) {
 	course := client.GetCourseById(courseDTO.IDCourse)
+	course.IDCourse = courseDTO.IDCourse
 
-	if course.IDCourse == 0 {
+	if course.IDCourse <= 0 {
 		return courseDTO, errors.New("course not found")
 	}
 
+	courseCheck := client.GetCourseByName(course.CourseName)
+
+	if courseDTO.IDCourse != courseCheck.IDCourse {
+		return courseDTO, errors.New("there is already a course with this name")
+	}
+
+	if course.CourseName == "" {
+		return courseDTO, errors.New("the course need a name")
+	}
+
+	if course.Rating < 0 || course.Rating > 5 {
+		return courseDTO, errors.New("rating out of range")
+	}
+
+	// I need to pass the data from the DTO to the DAO (include New Categories)
 	course.IDImage = courseDTO.IDImage
 	course.CourseName = courseDTO.CourseName
 	course.Description = courseDTO.Description
@@ -164,21 +185,21 @@ func (s *courseService) PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, e
 	course.InitDate = courseDTO.InitDate
 	course.Rating = courseDTO.Rating
 
+	var newCategories model.Categories
 	for _, categoryName := range courseDTO.Categories {
 		category := client.GetCategoryByName(categoryName)
 
-		if category.IDCategory == 0 {
+		if category.IDCategory <= 0 {
 			return courseDTO, errors.New("category not found")
 		}
 
-		course.Categories = append(course.Categories, category)
-
+		newCategories = append(newCategories, category)
 	}
 
-	course = client.PutCourseById(course)
+	course = client.PutCourseById(course, newCategories)
 
 	if course.IDCourse < 0 {
-		return courseDTO, errors.New("error creating course")
+		return courseDTO, errors.New("error updating course")
 	}
 
 	return courseDTO, nil

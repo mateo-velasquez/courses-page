@@ -19,6 +19,16 @@ func InsertCourseCategories(relation model.CourseCategories) model.CourseCategor
 	return relation
 }
 
-//func DeleteRelationsByCourseID(id int) model.CourseCategories {
-//
-//}
+func DeleteRelationsByCourseID(course model.Course) error {
+	var courseCategories model.CourseCategories
+
+	err := Db.Where("course_id = ?", course.IDCourse).Delete(&courseCategories).Error
+
+	if err != nil {
+		log.Debug("Failed to delete relation course_categories")
+	} else {
+		log.Debug("relation course_categories deleted: (", course.IDCourse, ",x)")
+	}
+
+	return err
+}

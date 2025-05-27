@@ -9,7 +9,14 @@ import (
 func GetCourseById(id int) model.Course {
 	var course model.Course
 
-	Db.Where("course_id = ?", id).First(&course)
+	result := Db.Where("course_id = ?", id).First(&course)
+
+	if result.Error != nil {
+		log.Error("Failed to get course: id out of range")
+		course.IDCourse = -1
+		return course
+	}
+
 	// Aparentemente GORM está generando un JOIN sin la condición ON. Eso rompe completamente la consulta.
 	//Db.Where("course_id = ?", id).Preload("Categories").First(&course)
 	var categories model.Categories
@@ -43,6 +50,23 @@ func GetCourses() model.Courses {
 	return courses
 }
 
+func GetCourseByName(name string) model.Course {
+	var course model.Course
+
+	Db.Debug().Where("course_name = ?", name).First(&course)
+
+	var categories model.Categories
+	Db.Table("categories").
+		Joins("JOIN course_categories ON course_categories.category_id = categories.category_id").
+		Where("course_categories.course_id = ?", course.IDCourse).
+		Scan(&categories)
+	course.Categories = categories
+
+	log.Debug("Courses: ", course)
+
+	return course
+}
+
 func GetCoursesByName(name string) model.Courses {
 	var courses model.Courses
 
@@ -64,7 +88,7 @@ func GetCoursesByName(name string) model.Courses {
 
 func InsertCourse(course model.Course) model.Course {
 	var courseAuxiliar model.Course
-	Db.Where("course_name LIKE ?", "%"+course.CourseName+"%").First(&courseAuxiliar)
+	Db.Debug().Where("course_name LIKE ?", "%"+course.CourseName+"%").First(&courseAuxiliar)
 
 	if courseAuxiliar.IDCourse != 0 {
 		log.Error("There is already a course with this name")
@@ -103,28 +127,50 @@ func InsertCourse(course model.Course) model.Course {
 	return course
 }
 
-func PutCourseById(course model.Course) model.Course {
-	var newCategories model.Categories
+func PutCourseById(course model.Course, newCategories model.Categories) model.Course {
+	// We verify that the ID we pass is correct.
+	log.Debugf("Intentando actualizar el curso con ID: %d", course.IDCourse)
 
-	for _, category := range course.Categories {
-		newCategories = append(newCategories, category)
+	tx := Db.Begin()
+
+	// we force GORM to do an update ("save" doesn't necessarily do it)
+	if err := tx.Model(&model.Course{}).Where("course_id = ?", course.IDCourse).Updates(course).Error; err != nil {
+		tx.Rollback()
+		log.Error("Failed to update course:", err)
+		course.IDCourse = -1
+		return course
 	}
 
-	result := Db.Save(&course)
-
-	Db.Model(&course).Association("Categories").Replace(newCategories)
-
-	if result.Error != nil {
-		log.Debug("Failed to update course")
-		return model.Course{}
+	// old relationships between courses and categories are deleted
+	if err := tx.Debug().Where("course_id = ?", course.IDCourse).Delete(&model.CourseCategories{}).Error; err != nil {
+		tx.Rollback()
+		log.Error("Failed to delete old relations:", err)
+		course.IDCourse = -1
+		return course
 	}
 
-	log.Debug("Updated course: ", course.IDCourse)
+	// New course and category relationships are created
+	for _, category := range newCategories {
+		categoryAUX := GetCategoryByName(category.CategoryName)
+		relation := model.CourseCategories{
+			IDCourse:   course.IDCourse,
+			IDCategory: categoryAUX.IDCategory,
+		}
+		if err := tx.Debug().Create(&relation).Error; err != nil {
+			tx.Rollback()
+			log.Error("Failed to insert relation:", err)
+			course.IDCourse = -1
+			return course
+		}
+	}
+
+	tx.Commit()
+	log.Debug("Updated course and relations:", course.IDCourse)
 	return course
 }
 
 func DeleteCourseById(course model.Course) error {
-	err := Db.Debug().Where("course_id = ?", course.IDCourse).Delete(&course).Error
+	err := Db.Where("course_id = ?", course.IDCourse).Delete(&course).Error
 
 	if err != nil {
 		log.Debug("Failed to delete course")
