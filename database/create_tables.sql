@@ -99,6 +99,7 @@ BEGIN
 END //
 
 DELIMITER ;
+*/
 
 DELIMITER //
 
@@ -127,7 +128,7 @@ FOR EACH ROW
 BEGIN
     DECLARE avg_rating DECIMAL(3,2);
 
-    IF NEW.individual_rating <> OLD.individual_rating THEN
+    IF NEW.individual_rating <=> OLD.individual_rating THEN
         SELECT AVG(individual_rating) INTO avg_rating
         FROM subscriptions
         WHERE course_id = NEW.course_id;
@@ -156,4 +157,3 @@ BEGIN
 END //
 
 DELIMITER ;
-*/
