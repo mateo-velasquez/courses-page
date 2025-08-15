@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     subscription_id INT PRIMARY KEY AUTO_INCREMENT,
     course_id INT NOT NULL,
     user_id INT NOT NULL,
+    course_role ENUM('Teacher', 'Student') NOT NULL DEFAULT 'Student',
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     individual_rating DECIMAL(3,2) CHECK(individual_rating >= 0 AND individual_rating <= 5),
     comment VARCHAR(300),
@@ -55,14 +56,12 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 -- Table for Files
 CREATE TABLE IF NOT EXISTS files (
     file_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    course_id INT NOT NULL,
+    subscription_id INT NOT NULL,
     file_name VARCHAR(300) NOT NULL,
     file_path VARCHAR(255) NOT NULL,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     upload_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (subscription_id) REFERENCES subscriptions(subscription_id) ON DELETE CASCADE
 );
 
 -- Tabla pasarela entre cursos y categorias

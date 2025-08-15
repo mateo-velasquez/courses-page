@@ -206,6 +206,7 @@ INSERT INTO course_categories(course_id, category_id) VALUES
 (47, 5), (47, 34), (47, 35);
 
 -- Load data into the subscriptions table
+/*
 INSERT INTO subscriptions(course_id, user_id) VALUES
 (27,3),(41,8),(3,9),(10,11),(33,6),(15,12),(22,4),(9,3),(5,7),(47,10),
 (38,5),(6,7),(21,11),(11,9),(2,8),(44,12),(1,6),(13,3),(8,4),(29,5),
@@ -217,5 +218,5 @@ INSERT INTO subscriptions(course_id, user_id) VALUES
 (3,7),(12,4),(43,9),(22,12),(40,8),(18,3),(35,10),(8,7),(41,5),
 (13,11),(19,6),(34,12),(30,9),(24,7),(37,4),(45,3),(46,8),
 (1,10),(10,5),(7,9),(21,6),(11,12)
-
+*/
 -- Load data into the files table
