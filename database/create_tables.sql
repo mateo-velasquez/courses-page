@@ -2,12 +2,12 @@
 CREATE TABLE IF NOT EXISTS users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     dni VARCHAR(9) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    user_password VARCHAR(100) NOT NULL,
+    user_password VARCHAR(255) NOT NULL,
     access_level ENUM('User', 'Admin') NOT NULL DEFAULT 'User'
 );
 
@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS courses (
     course_id INT PRIMARY KEY AUTO_INCREMENT,
     image_id INT,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     course_name VARCHAR(300) NOT NULL,
     price DECIMAL(10,2) NOT NULL CHECK (price > 0),
     init_date DATE NOT NULL,
     course_description VARCHAR(1000),
     duration VARCHAR(100) NOT NULL,
     rating DECIMAL(3,2) DEFAULT 0 CHECK (rating >= 0 AND rating <= 5),
-    FOREIGN KEY (image_id) REFERENCES images(image_id) ON DELETE CASCADE
+    FOREIGN KEY (image_id) REFERENCES images(image_id) ON DELETE SET NULL
 );
 
 -- Table for Subscriptions
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     individual_rating DECIMAL(3,2) CHECK(individual_rating >= 0 AND individual_rating <= 5),
     comment VARCHAR(300),
-    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     UNIQUE (course_id, user_id)
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS files (
     file_name VARCHAR(300) NOT NULL,
     file_path VARCHAR(255) NOT NULL,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    upload_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    upload_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (subscription_id) REFERENCES subscriptions(subscription_id) ON DELETE CASCADE
 );
 
@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS course_categories (
     FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
 );
 
+/*
 -- Triggers for Update "lastupdate_date"
 DELIMITER //
 
@@ -155,3 +156,4 @@ BEGIN
 END //
 
 DELIMITER ;
+*/
