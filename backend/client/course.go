@@ -67,36 +67,29 @@ func GetCourseByName(name string) model.Course {
 	return course
 }
 
-func SearchCourses(query string, categories []string) model.Courses {
+func SearchCourses(query string, categoryIDs []int) model.Courses {
 	var courses model.Courses
 
-	// Log input values
 	log.Debug("Search query: ", query)
-	log.Debug("Search categories: ", categories)
+	log.Debug("Search category IDs: ", categoryIDs)
 
-	// Start with base DB
 	queryDB := Db
 
-	// Filter by course name (only if provided)
 	if query != "" {
 		queryDB = queryDB.Where("course_name LIKE ?", "%"+query+"%")
 	}
 
-	// Filter by categories (only if provided)
-	if len(categories) > 0 {
+	if len(categoryIDs) > 0 {
 		queryDB = queryDB.
-			Joins("JOIN course_categories ON course_categories.course_id = courses.course_id").
-			Joins("JOIN categories ON categories.category_id = course_categories.category_id").
-			Where("categories.category_name IN ?", categories)
+			Joins("JOIN course_categories cc ON cc.course_id = courses.course_id").
+			Where("cc.category_id IN (?)", categoryIDs)
 	}
 
-	// Execute query to get courses
 	if err := queryDB.Find(&courses).Error; err != nil {
 		log.Error("Error fetching courses: ", err)
 		return nil
 	}
 
-	// Load categories for each course
 	for i := range courses {
 		var courseCategories model.Categories
 		if err := Db.Table("categories").
@@ -109,7 +102,6 @@ func SearchCourses(query string, categories []string) model.Courses {
 	}
 
 	log.Debug("Courses: ", courses)
-
 	return courses
 }
 

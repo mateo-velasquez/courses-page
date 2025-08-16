@@ -38,21 +38,27 @@ func GetCourses(c *gin.Context) {
 }
 
 func SearchCourses(c *gin.Context) {
-	query := strings.TrimSpace(c.Query("q"))                    // It may come empty.
-	categoriesParam := strings.TrimSpace(c.Query("categories")) // It may come empty.
+	query := strings.TrimSpace(c.Query("q")) // Puede venir vacío
+	categoriesParam := c.Query("categories") // IDs separados por comas
 
-	var categories []string
+	var categoryIDs []int
 	if categoriesParam != "" {
-		categories = strings.Split(categoriesParam, ",")
+		idsStr := strings.Split(categoriesParam, ",")
+		for _, idStr := range idsStr {
+			id, err := strconv.Atoi(strings.TrimSpace(idStr))
+			if err == nil {
+				categoryIDs = append(categoryIDs, id)
+			}
+		}
 	}
 
 	// Validación: al menos un filtro
-	if query == "" && len(categories) == 0 {
+	if query == "" && len(categoryIDs) == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Debes proporcionar al menos 'q' o 'categories'"})
 		return
 	}
 
-	courses, err := service.CourseService.SearchCourses(query, categories)
+	courses, err := service.CourseService.SearchCourses(query, categoryIDs)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

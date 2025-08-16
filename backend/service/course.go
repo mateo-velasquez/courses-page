@@ -13,7 +13,7 @@ type courseServiceInterface interface {
 	InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	GetCourses() (dto.CoursesDTO, error)
 	GetCourseById(id int) (dto.CourseDTO, error)
-	SearchCourses(query string, categories []string) (dto.CoursesDTO, error)
+	SearchCourses(query string, categoryIDs []int) (dto.CoursesDTO, error)
 	PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	DeleteCourseById(id int) error
 }
@@ -82,21 +82,19 @@ func (s *courseService) GetCourses() (dto.CoursesDTO, error) {
 	return coursesDTO, nil
 }
 
-func (s *courseService) SearchCourses(query string, categories []string) (dto.CoursesDTO, error) {
+func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.CoursesDTO, error) {
 	var courses model.Courses
 	var coursesDTO dto.CoursesDTO
 
-	// If the name is empty, don't bother searching.
-	if query == "" {
+	if query == "" && len(categoryIDs) == 0 {
 		return coursesDTO, errors.New("course not found")
 	}
 
-	courses = client.SearchCourses(query, categories)
+	courses = client.SearchCourses(query, categoryIDs)
 
 	for _, course := range courses {
 		var courseDTO dto.CourseDTO
 
-		// I need to pass the data from the DTO to the DAO
 		courseDTO.IDCourse = course.IDCourse
 		courseDTO.IDImage = course.IDImage
 		courseDTO.CourseName = course.CourseName
@@ -111,7 +109,6 @@ func (s *courseService) SearchCourses(query string, categories []string) (dto.Co
 		}
 
 		coursesDTO = append(coursesDTO, courseDTO)
-
 	}
 
 	return coursesDTO, nil
