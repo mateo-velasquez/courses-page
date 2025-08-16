@@ -5,6 +5,8 @@ import (
 	"project/dto"
 	"project/service"
 
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -34,6 +36,51 @@ func GetSubscriptions(c *gin.Context) {
 	var subscriptionsDto dto.SubscriptionsDTO
 
 	subscriptionsDto, err := service.SubscriptionService.GetSubscriptions()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, subscriptionsDto)
+}
+
+func GetSubscriptionById(c *gin.Context) {
+	var subscriptionDto dto.SubscriptionDTO
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	subscriptionDto, err := service.SubscriptionService.GetSubscriptionById(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, subscriptionDto)
+}
+
+func GetSubscriptionsByUserId(c *gin.Context) {
+	var subscriptionsDto dto.SubscriptionsDTO
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	subscriptionsDto, err := service.SubscriptionService.GetSubscriptionsByUserId(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, subscriptionsDto)
+}
+
+func GetSubscriptionsByCourseId(c *gin.Context) {
+	var subscriptionsDto dto.SubscriptionsDTO
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	subscriptionsDto, err := service.SubscriptionService.GetSubscriptionsByCourseId(id)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
