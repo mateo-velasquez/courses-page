@@ -70,11 +70,14 @@ func GetCourseByName(name string) model.Course {
 func SearchCourses(query string, categoryIDs []int) model.Courses {
 	var courses model.Courses
 
+	// I visualize the parameters to see if the data reaches the client correctly.
 	log.Debug("Search query: ", query)
 	log.Debug("Search category IDs: ", categoryIDs)
 
+	// I initialize the query
 	queryDB := Db
 
+	// I check if they are searching by name
 	if query != "" {
 		queryDB = queryDB.Where("course_name LIKE ?", "%"+query+"%")
 	}
@@ -82,7 +85,9 @@ func SearchCourses(query string, categoryIDs []int) model.Courses {
 	if len(categoryIDs) > 0 {
 		queryDB = queryDB.
 			Joins("JOIN course_categories cc ON cc.course_id = courses.course_id").
-			Where("cc.category_id IN (?)", categoryIDs)
+			Where("cc.category_id IN (?)", categoryIDs).
+			Group("courses.course_id").
+			Having("COUNT(DISTINCT cc.category_id) = ?", len(categoryIDs))
 	}
 
 	if err := queryDB.Find(&courses).Error; err != nil {
