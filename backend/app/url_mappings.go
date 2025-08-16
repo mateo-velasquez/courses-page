@@ -19,10 +19,10 @@ func mapUrls() {
 	router.GET("/images", controller.GetImages)          //check
 
 	//COURSE
-	router.GET("/course/:id", controller.GetCourseById) //check
-	router.GET("/courses", controller.GetCourses)       //check
-	//router.GET("/search", controller.GetCoursesByNameAndCategory)
-	router.GET("/search/:name", controller.GetCoursesByName)  //fail (No quiero implementar la búsqueda hasta que no corrija el CRUD)
+	router.GET("/course/:id", controller.GetCourseById)    //check
+	router.GET("/courses", controller.GetCourses)          //check
+	router.GET("/course/search", controller.SearchCourses) //check a medias
+	// TEST: http://localhost:8090/course/search?q=Cocina
 	router.POST("/course", controller.InsertCourse)           //check
 	router.PUT("/course/:id", controller.PutCourseById)       //check
 	router.DELETE("/course/:id", controller.DeleteCourseById) //check

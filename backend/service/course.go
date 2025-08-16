@@ -13,8 +13,7 @@ type courseServiceInterface interface {
 	InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	GetCourses() (dto.CoursesDTO, error)
 	GetCourseById(id int) (dto.CourseDTO, error)
-	GetCoursesByName(name string) (dto.CoursesDTO, error)
-	//	GetCoursesByNameAndCategory(name string, categories []string) (dto.CoursesDTO, error)
+	SearchCourses(query string, categories []string) (dto.CoursesDTO, error)
 	PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	DeleteCourseById(id int) error
 }
@@ -83,16 +82,16 @@ func (s *courseService) GetCourses() (dto.CoursesDTO, error) {
 	return coursesDTO, nil
 }
 
-func (s *courseService) GetCoursesByName(name string) (dto.CoursesDTO, error) {
+func (s *courseService) SearchCourses(query string, categories []string) (dto.CoursesDTO, error) {
 	var courses model.Courses
 	var coursesDTO dto.CoursesDTO
 
 	// If the name is empty, don't bother searching.
-	if name == "" {
-		return coursesDTO, errors.New("name not found")
+	if query == "" {
+		return coursesDTO, errors.New("course not found")
 	}
 
-	courses = client.GetCoursesByName(name)
+	courses = client.SearchCourses(query, categories)
 
 	for _, course := range courses {
 		var courseDTO dto.CourseDTO
@@ -117,8 +116,6 @@ func (s *courseService) GetCoursesByName(name string) (dto.CoursesDTO, error) {
 
 	return coursesDTO, nil
 }
-
-//func (s *courseService) GetCoursesByNameAndCategory(courseSearchDTO dto.CourseSearchDTO) dto.CoursesDTO
 
 func (s *courseService) InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, error) {
 	var course model.Course

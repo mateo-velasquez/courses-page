@@ -5,6 +5,7 @@ import (
 	"project/dto"
 	"project/service"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
@@ -36,14 +37,22 @@ func GetCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, coursesDto)
 }
 
-func GetCoursesByName(c *gin.Context) {
-	name := c.Param("name")
-	if name == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "name parameter is required"})
+func SearchCourses(c *gin.Context) {
+	query := strings.TrimSpace(c.Query("q"))                    // It may come empty.
+	categoriesParam := strings.TrimSpace(c.Query("categories")) // It may come empty.
+
+	var categories []string
+	if categoriesParam != "" {
+		categories = strings.Split(categoriesParam, ",")
+	}
+
+	// Validación: al menos un filtro
+	if query == "" && len(categories) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Debes proporcionar al menos 'q' o 'categories'"})
 		return
 	}
 
-	courses, err := service.CourseService.GetCoursesByName(name)
+	courses, err := service.CourseService.SearchCourses(query, categories)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -51,19 +60,6 @@ func GetCoursesByName(c *gin.Context) {
 
 	c.JSON(http.StatusOK, courses)
 }
-
-//func GetCoursesByNameAndCategory(c *gin.Context) {
-//	name := c.Query("name")
-//	categories := c.Query("categories")
-//
-//	courses, err := service.CourseService.GetCoursesByNameAndCategory(name, categories)
-//	if err != nil {
-//		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-//		return
-//	}
-//
-//	c.JSON(http.StatusOK, courses)
-//}
 
 func InsertCourse(c *gin.Context) {
 	var courseDto dto.CourseDTO

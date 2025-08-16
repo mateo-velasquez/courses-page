@@ -6,8 +6,6 @@ import (
 	"project/service"
 
 	"fmt"
-	"io"
-	"os"
 	"path/filepath"
 	"strconv"
 
@@ -73,25 +71,7 @@ func GetImageById(c *gin.Context) {
 		return
 	}
 
-	filePath := imageDto.ImagePath
-
-	file, err := os.Open(filePath)
-
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		return
-	}
-
-	defer file.Close()
-
-	c.Header("Content-Type", "image/jpg")
-
-	_, err = io.Copy(c.Writer, file)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+	c.JSON(http.StatusOK, imageDto)
 }
 
 func GetImages(c *gin.Context) {

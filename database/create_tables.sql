@@ -73,34 +73,6 @@ CREATE TABLE IF NOT EXISTS course_categories (
     FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
 );
 
-/*
--- Triggers for Update "lastupdate_date"
-DELIMITER //
-
-CREATE TRIGGER update_lastupdate_date_subscriptions
-BEFORE UPDATE ON subscriptions
-FOR EACH ROW
-BEGIN
-    SET NEW.lastupdate_date = NOW(); 
-END //
-
-CREATE TRIGGER update_lastupdate_date_users
-BEFORE UPDATE ON users
-FOR EACH ROW
-BEGIN
-    SET NEW.lastupdate_date = NOW(); 
-END //
-
-CREATE TRIGGER update_lastupdate_date_course
-BEFORE UPDATE ON courses
-FOR EACH ROW
-BEGIN
-    SET NEW.lastupdate_date = NOW(); 
-END //
-
-DELIMITER ;
-*/
-
 DELIMITER //
 
 -- Trigger to update course rating after INSERT on subscriptions
