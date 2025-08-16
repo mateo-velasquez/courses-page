@@ -29,10 +29,10 @@ func mapUrls() {
 	router.DELETE("/course/:id", controller.DeleteCourseById) //check
 
 	//SUBSCRIPTION
-	//router.POST("/subscription", controller.InsertSuscription)
-	//router.GET("/subscription/:id", controller.GetSubscriptionById)
-	//router.GET("/subscriptions", controller.GetSubscriptions) //check
-	//router.GET("/user/subscription/:id", controller.GetSubscriptionsByUserId)
+	router.POST("/subscription", controller.InsertSuscription) // check crear subscriptions
+	router.GET("/subscriptions", controller.GetSubscriptions)  // check
+	//router.GET("/subscription/:id", controller.GetSubscriptionById) // obteer subscription by id
+	//router.GET("/user/subscription/:id", controller.GetSubscriptionsByUserId) // obtener la subscription de un usuario en un curso?
 	//router.GET("/course/subscription/:id", controller.GetSubscriptionsByCourseId)
 	//router.PUT("/subscription/rating/:id", controller.PutRating)
 	//router.PUT("/subscription/comment/:id", controller.PutComment)

@@ -1,1 +1,44 @@
 package controller
+
+import (
+	"net/http"
+	"project/dto"
+	"project/service"
+
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
+)
+
+func InsertSuscription(c *gin.Context) {
+	var subscriptionDto dto.SubscriptionDTO
+	err := c.BindJSON(&subscriptionDto)
+
+	// If deserialization fails (fields or something is missing in the body) then throw a badrequest
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} //devolvemos un objeto JSON con un campo error que contiene el mensaje de error.
+
+	subscriptionDto, er := service.SubscriptionService.InsertSubscription(subscriptionDto)
+
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": er.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, subscriptionDto) // Si está todo bien devuelve un 201 y el SubscriptionDTO
+}
+
+func GetSubscriptions(c *gin.Context) {
+	var subscriptionsDto dto.SubscriptionsDTO
+
+	subscriptionsDto, err := service.SubscriptionService.GetSubscriptions()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, subscriptionsDto)
+}
