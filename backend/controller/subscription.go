@@ -110,5 +110,20 @@ func PutRating(c *gin.Context) {
 }
 
 func PutComment(c *gin.Context) {
+	var commentDto dto.CommentDTO
 
+	// Parseo el body
+	if err := c.ShouldBindJSON(&commentDto); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	commentDto, err := service.SubscriptionService.PutComment(commentDto)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, commentDto)
 }

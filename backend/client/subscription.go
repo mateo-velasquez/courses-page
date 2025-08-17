@@ -109,3 +109,30 @@ func PutRating(subscription model.Subscription) model.Subscription {
 	// Devolvemos el objeto actualizado
 	return original
 }
+
+func PutComment(subscription model.Subscription) model.Subscription {
+	var original model.Subscription
+
+	// Primero buscamos el subscription original
+	result := Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
+
+	if result.Error != nil {
+		log.Error("Failed to find Subscription.")
+		subscription.IDSubscription = -1
+		return subscription
+	}
+
+	// Actualizamos solo el rating
+	original.Comment = subscription.Comment
+
+	// Guardamos el cambio
+	change := Db.Model(&original).Update("comment", subscription.Comment)
+	if change.Error != nil {
+		log.Error("Failed to Save Subscription.")
+		subscription.IDSubscription = -2
+		return subscription
+	}
+
+	// Devolvemos el objeto actualizado
+	return original
+}
