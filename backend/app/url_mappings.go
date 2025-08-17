@@ -32,10 +32,10 @@ func mapUrls() {
 	router.POST("/user/subscription", controller.InsertSuscription)                // check crear subscriptions
 	router.GET("/subscriptions", controller.GetSubscriptions)                      // check
 	router.GET("/subscription/:id", controller.GetSubscriptionById)                // check (obtener subscription by id)
-	router.GET("/user/subscriptions/:id", controller.GetSubscriptionsByUserId)     // obtener las subscriptions de un usuario
-	router.GET("/course/subscriptions/:id", controller.GetSubscriptionsByCourseId) // obtener las subscriptions que hay en un curso
-	//router.PUT("/subscription/rating/:id", controller.PutRating)
-	//router.PUT("/subscription/comment/:id", controller.PutComment)
+	router.GET("/user/subscriptions/:id", controller.GetSubscriptionsByUserId)     // check (obtener las subscriptions de un usuario)
+	router.GET("/course/subscriptions/:id", controller.GetSubscriptionsByCourseId) // check (obtener las subscriptions que hay en un curso)
+	router.PUT("/course/subscription/rating/:id", controller.PutRating)            // check
+	router.PUT("/course/subscription/comment/:id", controller.PutComment)
 
 	//CATEGORY
 	router.POST("/category", controller.InsertCategory)     //check

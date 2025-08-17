@@ -55,7 +55,6 @@ func GetSubscriptionById(id int) model.Subscription {
 
 func GetSubscriptionsByUserId(userId int) model.Subscriptions {
 	var subscriptions model.Subscriptions
-	log.Debug(userId)
 
 	result := Db.Where("user_id = ?", userId).Find(&subscriptions)
 
@@ -71,7 +70,6 @@ func GetSubscriptionsByUserId(userId int) model.Subscriptions {
 
 func GetSubscriptionsByCourseId(courseId int) model.Subscriptions {
 	var subscriptions model.Subscriptions
-	log.Debug(courseId)
 
 	result := Db.Where("course_id = ?", courseId).Find(&subscriptions)
 
@@ -83,4 +81,31 @@ func GetSubscriptionsByCourseId(courseId int) model.Subscriptions {
 	log.Debug("Subscriptions: ", subscriptions)
 
 	return subscriptions
+}
+
+func PutRating(subscription model.Subscription) model.Subscription {
+	var original model.Subscription
+
+	// Primero buscamos el subscription original
+	result := Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
+
+	if result.Error != nil {
+		log.Error("Failed to find Subscription.")
+		subscription.IDSubscription = -1
+		return subscription
+	}
+
+	// Actualizamos solo el rating
+	original.IndividualRating = subscription.IndividualRating
+
+	// Guardamos el cambio
+	change := Db.Model(&original).Update("individual_rating", subscription.IndividualRating)
+	if change.Error != nil {
+		log.Error("Failed to Save Subscription.")
+		subscription.IDSubscription = -2
+		return subscription
+	}
+
+	// Devolvemos el objeto actualizado
+	return original
 }

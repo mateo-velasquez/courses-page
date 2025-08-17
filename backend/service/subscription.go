@@ -15,6 +15,8 @@ type subscriptionServiceInterface interface {
 	GetSubscriptionById(id int) (dto.SubscriptionDTO, error)
 	GetSubscriptionsByUserId(userId int) (dto.SubscriptionsDTO, error)
 	GetSubscriptionsByCourseId(courseId int) (dto.SubscriptionsDTO, error)
+	PutRating(ratingDto dto.RatingDTO) (dto.RatingDTO, error)
+	//PutComment() ()
 }
 
 var SubscriptionService subscriptionServiceInterface
@@ -147,4 +149,31 @@ func (s *subscriptionService) GetSubscriptionsByCourseId(courseId int) (dto.Subs
 	}
 
 	return subscriptionsDTO, nil
+}
+
+func (s *subscriptionService) PutRating(ratingDto dto.RatingDTO) (dto.RatingDTO, error) {
+	var subscription model.Subscription
+
+	if ratingDto.IndividualRating < 0 || ratingDto.IndividualRating > 5 {
+		return ratingDto, errors.New("error rating is out of range")
+	}
+
+	if ratingDto.IDSubscription <= 0 {
+		return ratingDto, errors.New("error this subscription doesn't exists")
+	}
+
+	subscription.IDSubscription = ratingDto.IDSubscription
+	subscription.IndividualRating = ratingDto.IndividualRating
+
+	subscription = client.PutRating(subscription)
+
+	if subscription.IDSubscription == -1 {
+		return ratingDto, errors.New("error finding the rating")
+	}
+
+	if subscription.IDSubscription == -2 {
+		return ratingDto, errors.New("error changing the rating")
+	}
+
+	return ratingDto, nil
 }

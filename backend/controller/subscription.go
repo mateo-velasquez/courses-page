@@ -89,3 +89,26 @@ func GetSubscriptionsByCourseId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, subscriptionsDto)
 }
+
+func PutRating(c *gin.Context) {
+	var ratingDto dto.RatingDTO
+
+	// Parseo el body
+	if err := c.ShouldBindJSON(&ratingDto); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ratingDto, err := service.SubscriptionService.PutRating(ratingDto)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, ratingDto)
+}
+
+func PutComment(c *gin.Context) {
+
+}
