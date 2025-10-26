@@ -1,8 +1,8 @@
-version: '3'
-
 services:
   database:
-    build: ./Database
+    build: ./database
+    env_file:
+      - ./backend/.env
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -12,16 +12,26 @@ services:
     expose:
       - ${MYSQL_TCP_PORT}
     volumes:
-      - ./Database:/docker-entrypoint-initdb.d
+      - ./database:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       timeout: 20s
       retries: 10
 
   backend:
-    build: ./Backend
+    build: ./backend
+    env_file:
+      - ./backend/.env
+      - ./backend/db/.env
     depends_on:
       database:
         condition: service_healthy
     ports:
       - "8090:8090"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend

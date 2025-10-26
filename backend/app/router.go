@@ -14,8 +14,14 @@ func init() {
 	router = gin.Default()
 	// Initializes the router with gin's default configurations.
 	// This includes middleware like the logger and the panic recovery handler.
-	router.Use(cors.Default())
-	// Adds CORS middleware with default settings to all router routes.
+	
+	// Configure CORS to allow frontend connections
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://frontend:5173"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	router.Use(cors.New(config))
+	// Adds CORS middleware with custom settings to allow frontend connections.
 }
 
 func StartRoute() {

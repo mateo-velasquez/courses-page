@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login</title>
+</head>
+<body>
+    <h1>Test de Login</h1>
+    
+    <div>
+        <h2>Login con Admin</h2>
+        <button onclick="testAdminLogin()">Test Admin Login</button>
+        <div id="adminResult"></div>
+    </div>
+    
+    <div>
+        <h2>Login con Usuario</h2>
+        <button onclick="testUserLogin()">Test User Login</button>
+        <div id="userResult"></div>
+    </div>
+    
+    <div>
+        <h2>Login con credenciales incorrectas</h2>
+        <button onclick="testInvalidLogin()">Test Invalid Login</button>
+        <div id="invalidResult"></div>
+    </div>
+
+    <script>
+        async function testLogin(email, password, resultDiv) {
+            try {
+                const response = await fetch('http://localhost:8090/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        userpassword: password
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                document.getElementById(resultDiv).innerHTML = 
+                    `<strong>✅ Success!</strong><br>
+                     Token: ${data.token ? 'Present' : 'Missing'}<br>
+                     User: ${data.user ? JSON.stringify(data.user, null, 2) : 'Missing'}`;
+                console.log('Login success:', data);
+            } catch (error) {
+                document.getElementById(resultDiv).innerHTML = 
+                    `<strong>❌ Error:</strong> ${error.message}`;
+                console.error('Login error:', error);
+            }
+        }
+
+        function testAdminLogin() {
+            testLogin('2214715@ucc.edu.ar', 'admin', 'adminResult');
+        }
+
+        function testUserLogin() {
+            testLogin('2215878@ucc.edu.ar', 'pass', 'userResult');
+        }
+
+        function testInvalidLogin() {
+            testLogin('invalid@email.com', 'wrongpassword', 'invalidResult');
+        }
+    </script>
+</body>
+</html>
