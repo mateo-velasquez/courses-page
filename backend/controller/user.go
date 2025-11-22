@@ -104,11 +104,14 @@ func UserLogin(c *gin.Context) {
 	token, er := createToken(userDto)
 	if er != nil {
 		log.Error(er.Error())
-		c.JSON(http.StatusBadRequest, "error generating token")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error generating token"})
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{"token": token})
+	c.JSON(http.StatusAccepted, gin.H{
+		"token": token,
+		"user":  userDto,
+	})
 }
 
 func createToken(loginDto dto.UserDTO) (string, error) {
