@@ -43,6 +43,9 @@ func mapUrls() {
 	router.GET("/categories", controller.GetCategories)     //check
 
 	//FILES
+	// Agrega esto dentro de func mapUrls()
+
+	router.Static("/images", "./images")
 
 	log.Info("Finishing mappings configurations")
 }
