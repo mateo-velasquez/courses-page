@@ -16,7 +16,7 @@ type courseServiceInterface interface {
 	SearchCourses(query string, categoryIDs []int) (dto.CoursesDTO, error)
 	PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	DeleteCourseById(id int) error
-	GetCourseComments(id int) (dto.CommentsDTO, error)
+	GetCourseComments(id int) (dto.ResponseCommentsDTO, error)
 }
 
 var CourseService courseServiceInterface
@@ -212,22 +212,32 @@ func (s *courseService) DeleteCourseById(id int) error {
 	return err
 }
 
-func (s *courseService) GetCourseComments(id int) (dto.CommentsDTO, error) {
-	var commentsDTO dto.CommentsDTO
+func (s *courseService) GetCourseComments(id int) (dto.ResponseCommentsDTO, error) {
+	var commentsDTO dto.ResponseCommentsDTO
 	var subscriptions model.Subscriptions
 
 	if id <= 0 {
-		return commentsDTO, errors.New("Wrong ID")
+		return commentsDTO, errors.New("wrong ID")
 	}
 
 	subscriptions = client.GetSubscriptionsByCourseId(id)
 
 	for _, subscription := range subscriptions {
-		var commentDTO dto.CommentDTO
+		var commentDTO dto.ResponseCommentDTO
 		commentDTO.IDSubscription = subscription.IDSubscription
 		commentDTO.Comment = subscription.Comment
 
-		commentsDTO = append(commentsDTO, commentDTO)
+		if commentDTO.Comment != "" {
+			// Consulta el nombre y el apellido del usuario asociado a la suscripción
+			var user model.User
+			user = client.GetUserBySubscriptionId(subscription.IDUser)
+			username := user.FirstName + " " + user.LastName
+
+			// guarda el nombre en el response
+			commentDTO.Username = username
+
+			commentsDTO = append(commentsDTO, commentDTO)
+		}
 	}
 
 	return commentsDTO, nil

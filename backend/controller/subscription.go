@@ -48,7 +48,11 @@ func GetSubscriptions(c *gin.Context) {
 func GetSubscriptionById(c *gin.Context) {
 	var subscriptionDto dto.SubscriptionDTO
 
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, er := strconv.Atoi(c.Param("id"))
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido en la URL"})
+		return
+	}
 
 	subscriptionDto, err := service.SubscriptionService.GetSubscriptionById(id)
 
@@ -63,7 +67,11 @@ func GetSubscriptionById(c *gin.Context) {
 func GetSubscriptionsByUserId(c *gin.Context) {
 	var subscriptionsDto dto.SubscriptionsDTO
 
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, er := strconv.Atoi(c.Param("id"))
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido en la URL"})
+		return
+	}
 
 	subscriptionsDto, err := service.SubscriptionService.GetSubscriptionsByUserId(id)
 
@@ -78,7 +86,11 @@ func GetSubscriptionsByUserId(c *gin.Context) {
 func GetSubscriptionsByCourseId(c *gin.Context) {
 	var subscriptionsDto dto.SubscriptionsDTO
 
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, er := strconv.Atoi(c.Param("id"))
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido en la URL"})
+		return
+	}
 
 	subscriptionsDto, err := service.SubscriptionService.GetSubscriptionsByCourseId(id)
 
@@ -119,12 +131,19 @@ func PutRating(c *gin.Context) {
 func PutComment(c *gin.Context) {
 	var commentDto dto.CommentDTO
 
-	// Parseo el body
+	// Parseo el body y el id
+	id, er := strconv.Atoi(c.Param("id"))
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido en la URL"})
+		return
+	}
+
 	if err := c.ShouldBindJSON(&commentDto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	commentDto.IDSubscription = id
 	commentDto, err := service.SubscriptionService.PutComment(commentDto)
 
 	if err != nil {

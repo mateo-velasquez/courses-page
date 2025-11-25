@@ -133,7 +133,7 @@ func DeleteCourseById(c *gin.Context) {
 
 // Function that returns all the comments about a course by the id
 func GetCourseComments(c *gin.Context) {
-	var commentsDto dto.CommentsDTO
+	var commentsDto dto.ResponseCommentsDTO
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	commentsDto, err := service.CourseService.GetCourseComments(id)
