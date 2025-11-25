@@ -1,7 +1,7 @@
 package dto
 
 type ImageDTO struct {
-	IDImage   int    `json:"id"`
+	ImageId   int    `json:"id"`
 	ImagePath string `json:"path"`
 }
 
