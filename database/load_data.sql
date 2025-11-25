@@ -1,17 +1,17 @@
 -- Load data into the users table
 INSERT INTO users (first_name, last_name, dni, email, user_password, access_level) VALUES
-('Mateo', 'Veda', '45407199', '2214715@ucc.edu.ar', '$2a$10$rj4xjdzIu/Gcw3JViJDnneDl7t1U6sQi0bYq1hpY/9t25WIMSg53q', 'Admin'), -- Password: admin
-('Tobias', 'Nicolas', '45496307', '2215878@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'Admin'), -- Password: pass
-('Agustina', 'Perez', '44789625', '2201488@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'), -- Password: pass
-('Nicolas', 'Rojas', '44963856', '2215886@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Francisco', 'Locascio', '46892456', '2522273@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Tiziano Agustin', 'Nicolas', '45894256', '2407889@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Leonardo Tomas', 'Mendez Rodriguez', '45123785', '2108727@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Julian', 'Riera', '44781578', '2221439@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Juan Pablo', 'Schmitt Perotti', '44999856', '2202819@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Francisco', 'Taurian', '46002351', '2318870@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Facundo', 'Zitto', '45174747', '2202975@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User'),
-('Julieta Belen', 'Cavestri Llanos', '45639369', '2217460@ucc.edu.ar', '$2a$10$dOU4sF4pMsgy/knb.yIM9uMnwY98K97ZczVFjYlhBDo4AG1Ezl.SS', 'User');
+('Mateo', 'Veda', '45407199', '2214715@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'Admin'), -- Password: admin1234
+('Tobias', 'Nicolas', '45496307', '2215878@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'Admin'), -- Password: admin1234
+('Agustina', 'Perez', '44789625', '2201488@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Nicolas', 'Rojas', '44963856', '2215886@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Francisco', 'Locascio', '46892456', '2522273@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Tiziano Agustin', 'Nicolas', '45894256', '2407889@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Leonardo Tomas', 'Mendez Rodriguez', '45123785', '2108727@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Julian', 'Riera', '44781578', '2221439@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Juan Pablo', 'Schmitt Perotti', '44999856', '2202819@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Francisco', 'Taurian', '46002351', '2318870@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Facundo', 'Zitto', '45174747', '2202975@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User'),
+('Julieta Belen', 'Cavestri Llanos', '45639369', '2217460@ucc.edu.ar', '$2a$10$8maCkyZVLJqrEGml76JXyuByMGudUDPPMX3yjHSRHvikRkKRlEWBu', 'User');
 
 -- Load data into the images table
 INSERT INTO images (image_path) VALUES
