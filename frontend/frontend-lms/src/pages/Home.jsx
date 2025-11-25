@@ -28,7 +28,7 @@ const Home = () => {
       const data = await courseService.getCourses();
       setCourses(data || []);
     } catch (error) {
-      setAlert({ type: 'error', message: 'Error al cargar los cursos' });
+      setAlert({ type: 'error', message: error.message || 'Error al cargar los cursos' });
     } finally {
       setIsLoading(false);
     }
@@ -40,6 +40,7 @@ const Home = () => {
       setCategories(data || []);
     } catch (error) {
       console.error('Error loading categories:', error);
+      setAlert({ type: 'error', message: error.message || 'Error al cargar las categorías' });
     }
   };
 
@@ -55,7 +56,7 @@ const Home = () => {
       const data = await courseService.searchCourses(searchQuery, selectedCategories);
       setCourses(data || []);
     } catch (error) {
-      setAlert({ type: 'error', message: 'Error al buscar cursos' });
+      setAlert({ type: 'error', message: error.message || 'Error al buscar cursos' });
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +84,7 @@ const Home = () => {
       });
       setAlert({ type: 'success', message: `Te has inscrito exitosamente en ${course.course_name}` });
     } catch (error) {
-      setAlert({ type: 'error', message: 'Error al inscribirse al curso' });
+      setAlert({ type: 'error', message: error.message || 'Error al inscribirse al curso' });
     }
   };
 
