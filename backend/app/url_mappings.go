@@ -24,9 +24,10 @@ func mapUrls() {
 	router.GET("/course/search", controller.SearchCourses) //check
 	// TEST: http://localhost:8090/course/search?q=Cocina
 	// TEST: http://localhost:8090/course/search?q=Cocina&categories=32,48
-	router.POST("/course", controller.InsertCourse)           //check
-	router.PUT("/course/:id", controller.PutCourseById)       //check
-	router.DELETE("/course/:id", controller.DeleteCourseById) //check
+	router.POST("/course", controller.InsertCourse)                  //check
+	router.PUT("/course/:id", controller.PutCourseById)              //check
+	router.DELETE("/course/:id", controller.DeleteCourseById)        //check
+	router.GET("/course/:id/comments", controller.GetCourseComments) //check
 
 	//SUBSCRIPTION
 	router.POST("/user/subscription", controller.InsertSuscription)                // check crear subscriptions
@@ -34,8 +35,8 @@ func mapUrls() {
 	router.GET("/subscription/:id", controller.GetSubscriptionById)                // check (obtener subscription by id)
 	router.GET("/user/subscriptions/:id", controller.GetSubscriptionsByUserId)     // check (obtener las subscriptions de un usuario)
 	router.GET("/course/subscriptions/:id", controller.GetSubscriptionsByCourseId) // check (obtener las subscriptions que hay en un curso)
-	router.PUT("/course/subscription/rating/:id", controller.PutRating)            // check
-	router.PUT("/course/subscription/comment/:id", controller.PutComment)          // check
+	router.PUT("/course/subscription/:id/rating", controller.PutRating)            // check
+	router.PUT("/course/subscription/:id/comment", controller.PutComment)          // check
 
 	//CATEGORY
 	router.POST("/category", controller.InsertCategory)     //check
@@ -43,9 +44,6 @@ func mapUrls() {
 	router.GET("/categories", controller.GetCategories)     //check
 
 	//FILES
-	// Agrega esto dentro de func mapUrls()
-
-	router.Static("/images", "./images")
 
 	log.Info("Finishing mappings configurations")
 }

@@ -93,12 +93,19 @@ func GetSubscriptionsByCourseId(c *gin.Context) {
 func PutRating(c *gin.Context) {
 	var ratingDto dto.RatingDTO
 
-	// Parseo el body
+	id, er := strconv.Atoi(c.Param("id"))
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido en la URL"})
+		return
+	}
+
 	if err := c.ShouldBindJSON(&ratingDto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	// Asigno el Id de la URL al DTO para que el servicio sepa qué actualizar
+	ratingDto.IDSubscription = id
 	ratingDto, err := service.SubscriptionService.PutRating(ratingDto)
 
 	if err != nil {

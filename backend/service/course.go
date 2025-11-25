@@ -16,6 +16,7 @@ type courseServiceInterface interface {
 	SearchCourses(query string, categoryIDs []int) (dto.CoursesDTO, error)
 	PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	DeleteCourseById(id int) error
+	GetCourseComments(id int) (dto.CommentsDTO, error)
 }
 
 var CourseService courseServiceInterface
@@ -209,4 +210,25 @@ func (s *courseService) DeleteCourseById(id int) error {
 	err := client.DeleteCourseById(course)
 
 	return err
+}
+
+func (s *courseService) GetCourseComments(id int) (dto.CommentsDTO, error) {
+	var commentsDTO dto.CommentsDTO
+	var subscriptions model.Subscriptions
+
+	if id <= 0 {
+		return commentsDTO, errors.New("Wrong ID")
+	}
+
+	subscriptions = client.GetSubscriptionsByCourseId(id)
+
+	for _, subscription := range subscriptions {
+		var commentDTO dto.CommentDTO
+		commentDTO.IDSubscription = subscription.IDSubscription
+		commentDTO.Comment = subscription.Comment
+
+		commentsDTO = append(commentsDTO, commentDTO)
+	}
+
+	return commentsDTO, nil
 }

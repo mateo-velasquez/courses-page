@@ -83,31 +83,55 @@ func GetSubscriptionsByCourseId(courseId int) model.Subscriptions {
 	return subscriptions
 }
 
+/*
+	func PutRating(subscription model.Subscription) model.Subscription {
+		var original model.Subscription
+
+		// Primero buscamos el subscription original
+		result := Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
+
+		if result.Error != nil {
+			log.Error("Failed to find Subscription.")
+			subscription.IDSubscription = -1
+			return subscription
+		}
+
+		// Actualizamos solo el rating
+		original.IndividualRating = subscription.IndividualRating
+
+		// Guardamos el cambio
+		change := Db.Model(&original).Update("individual_rating", subscription.IndividualRating)
+		if change.Error != nil {
+			log.Error("Failed to Save Subscription.")
+			subscription.IDSubscription = -2
+			return subscription
+		}
+
+		// Devolvemos el objeto actualizado
+		return original
+	}
+*/
 func PutRating(subscription model.Subscription) model.Subscription {
-	var original model.Subscription
 
 	// Primero buscamos el subscription original
-	result := Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
+	result := Db.Table("subscriptions").
+		Where("subscription_id = ?", subscription.IDSubscription).
+		Update("individual_rating", subscription.IndividualRating)
 
 	if result.Error != nil {
-		log.Error("Failed to find Subscription.")
-		subscription.IDSubscription = -1
+		log.Error("Failed to Save Subscription rating.")
+		subscription.IDSubscription = -2 // Código de error interno
 		return subscription
 	}
 
-	// Actualizamos solo el rating
-	original.IndividualRating = subscription.IndividualRating
-
-	// Guardamos el cambio
-	change := Db.Model(&original).Update("individual_rating", subscription.IndividualRating)
-	if change.Error != nil {
-		log.Error("Failed to Save Subscription.")
-		subscription.IDSubscription = -2
+	// Verificamos si realmente se actualizó algo (si el ID existía)
+	if result.RowsAffected == 0 {
+		log.Error("Subscription not found to update.")
+		subscription.IDSubscription = -1 // Código para "No encontrado"
 		return subscription
 	}
 
-	// Devolvemos el objeto actualizado
-	return original
+	return subscription
 }
 
 func PutComment(subscription model.Subscription) model.Subscription {

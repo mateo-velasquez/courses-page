@@ -11,6 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Function that returns a course by the id
 func GetCourseById(c *gin.Context) {
 	var courseDto dto.CourseDTO
 
@@ -25,6 +26,7 @@ func GetCourseById(c *gin.Context) {
 	c.JSON(http.StatusOK, courseDto)
 }
 
+// Function that returns all the courses
 func GetCourses(c *gin.Context) {
 	var coursesDto dto.CoursesDTO
 
@@ -37,6 +39,7 @@ func GetCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, coursesDto)
 }
 
+// Function that returns courses based on search query and optional categories
 func SearchCourses(c *gin.Context) {
 	query := strings.TrimSpace(c.Query("q")) // Puede venir vacío
 	categoriesParam := c.Query("categories") // IDs separados por comas
@@ -67,6 +70,7 @@ func SearchCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, courses)
 }
 
+// Function that insert a course
 func InsertCourse(c *gin.Context) {
 	var courseDto dto.CourseDTO
 
@@ -88,6 +92,7 @@ func InsertCourse(c *gin.Context) {
 	c.JSON(http.StatusCreated, courseDto) // Si está todo bien devuelve un 201 y el userDto
 }
 
+// Function that modified a course by the id
 func PutCourseById(c *gin.Context) {
 	var courseDto dto.CourseDTO
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -112,6 +117,7 @@ func PutCourseById(c *gin.Context) {
 	c.JSON(http.StatusOK, courseDto)
 }
 
+// Function that delete a course by the id
 func DeleteCourseById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
@@ -123,4 +129,19 @@ func DeleteCourseById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Course deleted"})
+}
+
+// Function that returns all the comments about a course by the id
+func GetCourseComments(c *gin.Context) {
+	var commentsDto dto.CommentsDTO
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	commentsDto, err := service.CourseService.GetCourseComments(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, commentsDto)
 }
