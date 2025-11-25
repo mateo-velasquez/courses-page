@@ -46,7 +46,8 @@ const Home = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!searchQuery.trim()) {
+    // Si no hay búsqueda ni categorías seleccionadas, obtener todos los cursos
+    if (!searchQuery.trim() && selectedCategories.length === 0) {
       fetchCourses();
       return;
     }
@@ -62,12 +63,27 @@ const Home = () => {
     }
   };
 
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategories(prev => 
-      prev.includes(categoryId)
-        ? prev.filter(id => id !== categoryId)
-        : [...prev, categoryId]
-    );
+  const handleCategoryChange = async (categoryId) => {
+    const newCategories = selectedCategories.includes(categoryId)
+      ? selectedCategories.filter(id => id !== categoryId)
+      : [...selectedCategories, categoryId];
+    
+    setSelectedCategories(newCategories);
+    
+    // Aplicar filtros automáticamente
+    if (newCategories.length === 0 && !searchQuery.trim()) {
+      fetchCourses();
+    } else {
+      setIsLoading(true);
+      try {
+        const data = await courseService.searchCourses(searchQuery, newCategories);
+        setCourses(data || []);
+      } catch (error) {
+        setAlert({ type: 'error', message: error.message || 'Error al filtrar cursos' });
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const handleEnroll = async (course) => {
