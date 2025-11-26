@@ -22,6 +22,9 @@ func init() {
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
 	router.Use(cors.New(config))
 	// Adds CORS middleware with custom settings to allow frontend connections.
+
+	// Serve static files from Images directory
+	router.Static("/images", "./Images")
 }
 
 func StartRoute() {

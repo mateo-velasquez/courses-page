@@ -1,8 +1,20 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Card from './Card.jsx';
 import Button from './Button.jsx';
 
-const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
+const CourseCard = ({ course, onEnroll, showEnrollButton = true, isEnrolled = false }) => {
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleEnrollClick = async () => {
+    setIsLoading(true);
+    await onEnroll(course);
+    setShowSuccess(true);
+    setIsLoading(false);
+    // Hide success message after 3 seconds
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -32,6 +44,18 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
   return (
     <Card className="h-full flex flex-col">
       <Card.Body className="flex-1">
+        {course.image_url && (
+          <div className="mb-4 -mx-4 -mt-4">
+            <img
+              src={`http://localhost:8090${course.image_url}`}
+              alt={course.course_name}
+              className="w-full h-40 object-cover rounded-t-lg"
+              onError={(e) => {
+                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhYWE7Zm9udC1zaXplOjE2cHg7Zm9udC1mYW1pbHk6QXJpYWw7Ij5ObyBpbWFnZTwvdGV4dD48L3N2Zz4=';
+              }}
+            />
+          </div>
+        )}
         <div className="mb-4">
           <h3 className="text-xl font-semibold mb-2">
             <Link
@@ -86,16 +110,31 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
           >
             Ver Detalles
           </Link>
-          {showEnrollButton && onEnroll && (
+          {showEnrollButton && onEnroll && !isEnrolled && (
             <Button
-              onClick={() => onEnroll(course)}
+              onClick={handleEnrollClick}
               variant="primary"
               className="flex-1"
+              disabled={isLoading}
+              loading={isLoading}
             >
-              Inscribirse
+              {isLoading ? 'Inscribiendo...' : 'Inscribirse'}
             </Button>
           )}
+          {isEnrolled && (
+            <button
+              disabled
+              className="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg text-center font-medium flex-1 cursor-not-allowed opacity-60 border border-gray-400"
+            >
+              ✓ Ya estás inscripto
+            </button>
+          )}
         </div>
+        {showSuccess && !isEnrolled && (
+          <div className="mt-3 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-center font-medium animate-pulse">
+            ✓ Te has inscrito exitosamente
+          </div>
+        )}
       </Card.Footer>
     </Card>
   );

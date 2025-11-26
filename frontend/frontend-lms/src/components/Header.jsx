@@ -22,7 +22,7 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="flex items-center gap-8">
-            <Link to="/" className="text-gray-300 hover:text-white transition-all font-medium">
+            <Link to="/" className="btn btn-outline btn-sm border-gray-500 text-gray-300 hover:text-white hover:border-white">
               🏠 Inicio
             </Link>
 
@@ -46,7 +46,7 @@ const Header = () => {
 
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-gray-300">
-                    Hola, <span className="text-white font-medium">{user?.first_name}</span>
+                    Hola, <span className="text-black font-medium">{user?.first_name}</span>
                   </span>
                   <button
                     onClick={handleLogout}
