@@ -69,8 +69,8 @@ const Register = () => {
 
     if (!formData.userpassword) {
       newErrors.userpassword = 'La contraseña es requerida';
-    } else if (formData.userpassword.length < 6) {
-      newErrors.userpassword = 'La contraseña debe tener al menos 6 caracteres';
+    } else if (formData.userpassword.length < 4) {
+      newErrors.userpassword = 'La contraseña debe tener al menos 4 caracteres';
     }
 
     if (!formData.confirmPassword) {

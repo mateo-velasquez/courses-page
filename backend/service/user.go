@@ -16,7 +16,8 @@ type userServiceInterface interface {
 	GetUsers() (dto.UsersDTO, error)
 	GetUserById(id int) (dto.UserDTO, error)
 	GetUserByEmail(email string) (dto.UserDTO, error)
-	UserLogin(loginDTO dto.UserDTO) (dto.UserDTO, error)
+	UserLogin(userDTO dto.UserDTO) (dto.UserDTO, error)
+	IsUserTeacher(id int) (bool, error)
 }
 
 var UserService userServiceInterface
@@ -151,4 +152,22 @@ func (s *userService) UserLogin(userDTO dto.UserDTO) (dto.UserDTO, error) {
 	userDTO.AccessLevel = user.AccessLevel
 
 	return userDTO, nil
+}
+
+func (s *userService) IsUserTeacher(id int) (bool, error) {
+	if id <= 0 {
+		return false, errors.New("ID not found")
+	}
+
+	// Get all subscriptions for this user
+	subscriptions := client.GetSubscriptionsByUserId(id)
+
+	// Check if any subscription has CourseRole = "Teacher"
+	for _, subscription := range subscriptions {
+		if subscription.CourseRole == "Teacher" {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }

@@ -212,7 +212,7 @@ const CourseDetail = () => {
                     {course.categories.map((category, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full"
+                        className="px-3 py-1 bg-gray-100 text-white text-sm rounded-full"
                       >
                         {category}
                       </span>
@@ -249,7 +249,7 @@ const CourseDetail = () => {
                             {formatDate(subscription.last_update_date || subscription.create_date)}
                           </span>
                         </div>
-                        <p className="text-gray-700">{subscription.comment}</p>
+                        <p className="text-white">{subscription.comment}</p>
                       </div>
                     ))}
                   </div>

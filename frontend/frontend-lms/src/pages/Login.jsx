@@ -52,8 +52,8 @@ const Login = () => {
 
     if (!formData.password) {
       newErrors.password = 'La contraseña es requerida';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+    } else if (formData.password.length < 4) {
+      newErrors.password = 'La contraseña debe tener al menos 4 caracteres';
     }
 
     setErrors(newErrors);

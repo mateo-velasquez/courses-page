@@ -11,6 +11,7 @@ func mapUrls() {
 	router.POST("/user", controller.InsertUser)     //check
 	router.GET("/users", controller.GetUsers)       //check
 	router.GET("/user/:id", controller.GetUserById) //check
+	router.GET("/user/:id/is-teacher", controller.IsUserTeacher) //check if user is teacher
 	router.POST("/login", controller.UserLogin)     //check
 
 	//IMAGE

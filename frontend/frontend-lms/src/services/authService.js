@@ -63,6 +63,22 @@ export const authService = {
     return user && user.accesslevel === 'admin';
   },
 
+  // Check if user is teacher
+  isTeacher: async () => {
+    const user = authService.getCurrentUser();
+    if (!user || !user.id) {
+      return false;
+    }
+    
+    try {
+      const response = await apiRequest(`/user/${user.id}/is-teacher`);
+      return response.is_teacher || false;
+    } catch (error) {
+      console.error('Error checking teacher status:', error);
+      return false;
+    }
+  },
+
   // Get auth token
   getToken: () => {
     return localStorage.getItem('token');
