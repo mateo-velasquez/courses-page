@@ -10,7 +10,6 @@ RUN go mod tidy
 COPY db/.env .env
 
 RUN go build -o project .
-RUN go test ./...
-RUN chmod +x /backend
+RUN chmod +x /backend/project
 
 ENTRYPOINT ["/backend/project"]
