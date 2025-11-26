@@ -465,25 +465,25 @@ body {
 .alert-success {
   background-color: #f0fdf4;
   border-color: #bbf7d0;
-  color: white;
+  color: #166534;
 }
 
 .alert-error {
   background-color: #fef2f2;
   border-color: #fecaca;
-  color: white;
+  color: #991b1b;
 }
 
 .alert-warning {
   background-color: #fffbeb;
   border-color: #fed7aa;
-  color: white;
+  color: #92400e;
 }
 
 .alert-info {
   background-color: #eff6ff;
   border-color: #bfdbfe;
-  color: white;
+  color: #1e40af;
 }
 
 /* Loading Spinner */
