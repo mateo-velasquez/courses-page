@@ -93,11 +93,17 @@ func GetSubscriptionsByCourseId(c *gin.Context) {
 func PutRating(c *gin.Context) {
 	var ratingDto dto.RatingDTO
 
+	// Obtener el ID de la suscripción desde el parámetro de la URL
+	id, _ := strconv.Atoi(c.Param("id"))
+
 	// Parseo el body
 	if err := c.ShouldBindJSON(&ratingDto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Asignar el ID de la URL al DTO
+	ratingDto.IDSubscription = id
 
 	ratingDto, err := service.SubscriptionService.PutRating(ratingDto)
 
@@ -112,11 +118,17 @@ func PutRating(c *gin.Context) {
 func PutComment(c *gin.Context) {
 	var commentDto dto.CommentDTO
 
+	// Obtener el ID de la suscripción desde el parámetro de la URL
+	id, _ := strconv.Atoi(c.Param("id"))
+
 	// Parseo el body
 	if err := c.ShouldBindJSON(&commentDto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Asignar el ID de la URL al DTO
+	commentDto.IDSubscription = id
 
 	commentDto, err := service.SubscriptionService.PutComment(commentDto)
 
