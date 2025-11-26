@@ -29,10 +29,12 @@ const CreateCourse = () => {
   const loadCategories = async () => {
     try {
       const data = await categoryService.getCategories();
+      console.log('Categorías recibidas del servidor:', data);
+      console.log('Número de categorías:', data?.length || 0);
       setCategories(data || []);
     } catch (err) {
       setError('Error al cargar las categorías');
-      console.error(err);
+      console.error('Error cargando categorías:', err);
     }
   };
 
@@ -77,7 +79,7 @@ const CreateCourse = () => {
       const courseData = {
         course_name: formData.course_name,
         duration: formData.duration,
-        init_date: formData.init_date,
+        init_date: formData.init_date + 'T00:00:00Z',
         description: formData.description,
         price: parseFloat(formData.price),
         categories: formData.categories,
@@ -85,6 +87,7 @@ const CreateCourse = () => {
         rating: 0,
       };
 
+      console.log('Datos del curso a enviar:', courseData);
       await courseService.createCourse(courseData);
       setSuccess('¡Curso creado exitosamente!');
       
@@ -181,17 +184,29 @@ const CreateCourse = () => {
                 multiple
                 value={formData.categories}
                 onChange={handleCategoryChange}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white min-h-[120px] transition-all"
+                className="w-full px-4 py-2 bg-gray-100 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white min-h-[120px] transition-all"
                 required
               >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.category_name}>
-                    {category.category_name}
-                  </option>
-                ))}
+                {categories.length === 0 ? (
+                  <option disabled>Cargando categorías...</option>
+                ) : (
+                  categories.map((category) => (
+                    <option 
+                      key={category.id} 
+                      value={category.name}
+                      style={{ backgroundColor: '#1e293b', color: 'white', padding: '8px' }}
+                    >
+                      {category.name}
+                    </option>
+                  ))
+                )}
               </select>
               <p className="text-sm text-gray-400 mt-1">
-                Seleccionadas: {formData.categories.length > 0 ? formData.categories.join(', ') : 'Ninguna'}
+                {categories.length === 0 ? (
+                  <span className="text-warning">⚠️ No hay categorías disponibles. Categorías cargadas: {categories.length}</span>
+                ) : (
+                  `Seleccionadas: ${formData.categories.length > 0 ? formData.categories.join(', ') : 'Ninguna'}`
+                )}
               </p>
             </div>
 
@@ -207,7 +222,7 @@ const CreateCourse = () => {
                 onChange={handleChange}
                 placeholder="Describe el contenido y objetivos del curso..."
                 rows="5"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white resize-none transition-all"
+                className="w-full px-4 py-2 bg-gray-100 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white resize-none transition-all"
                 required
               />
             </div>
