@@ -31,8 +31,20 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
 
   return (
     <Card className="h-full flex flex-col">
-      <Card.Body className="flex-1">
-        <div className="mb-4">
+      <Card.Body className="flex-1 flex gap-4">
+        {course.image_url && (
+          <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg">
+            <img
+              src={`http://localhost:8090${course.image_url}`}
+              alt={course.course_name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
+          </div>
+        )}
+        <div className="flex-1 mb-4">
           <h3 className="text-xl font-semibold mb-2">
             <Link
               to={`/course/${course.id}`}

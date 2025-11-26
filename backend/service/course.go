@@ -48,6 +48,14 @@ func (s *courseService) GetCourseById(id int) (dto.CourseDTO, error) {
 	courseDTO.InitDate = course.InitDate
 	courseDTO.Rating = course.Rating
 
+	// Get image URL
+	if course.IDImage > 0 {
+		imageDTO, err := ImageService.GetImageById(course.IDImage)
+		if err == nil {
+			courseDTO.ImageURL = "/" + imageDTO.ImagePath + ".jpg"
+		}
+	}
+
 	for _, category := range course.Categories {
 		courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
 	}
@@ -70,6 +78,14 @@ func (s *courseService) GetCourses() (dto.CoursesDTO, error) {
 		courseDTO.Price = course.Price
 		courseDTO.InitDate = course.InitDate
 		courseDTO.Rating = course.Rating
+
+		// Get image URL
+		if course.IDImage > 0 {
+			imageDTO, err := ImageService.GetImageById(course.IDImage)
+			if err == nil {
+				courseDTO.ImageURL = "/" + imageDTO.ImagePath + ".jpg"
+			}
+		}
 
 		for _, category := range course.Categories {
 			courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
@@ -103,6 +119,14 @@ func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.Cour
 		courseDTO.Price = course.Price
 		courseDTO.InitDate = course.InitDate
 		courseDTO.Rating = course.Rating
+
+		// Get image URL
+		if course.IDImage > 0 {
+			imageDTO, err := ImageService.GetImageById(course.IDImage)
+			if err == nil {
+				courseDTO.ImageURL = "/" + imageDTO.ImagePath + ".jpg"
+			}
+		}
 
 		for _, category := range course.Categories {
 			courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
