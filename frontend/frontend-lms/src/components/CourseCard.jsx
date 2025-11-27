@@ -80,7 +80,7 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true, isEnrolled = fa
               {course.categories.map((category, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md"
+                  className="px-2 py-1 bg-gray-100 text-white text-xs rounded-md"
                 >
                   {category}
                 </span>

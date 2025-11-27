@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import Card from '../components/Card.jsx';
@@ -24,10 +24,11 @@ const Register = () => {
   const navigate = useNavigate();
 
   // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate('/', { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,8 +70,8 @@ const Register = () => {
 
     if (!formData.userpassword) {
       newErrors.userpassword = 'La contraseña es requerida';
-    } else if (formData.userpassword.length < 6) {
-      newErrors.userpassword = 'La contraseña debe tener al menos 6 caracteres';
+    } else if (formData.userpassword.length < 4) {
+      newErrors.userpassword = 'La contraseña debe tener al menos 4 caracteres';
     }
 
     if (!formData.confirmPassword) {

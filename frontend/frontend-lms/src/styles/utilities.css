@@ -471,19 +471,19 @@ body {
 .alert-error {
   background-color: #fef2f2;
   border-color: #fecaca;
-  color: #dc2626;
+  color: #991b1b;
 }
 
 .alert-warning {
   background-color: #fffbeb;
   border-color: #fed7aa;
-  color: #d97706;
+  color: #92400e;
 }
 
 .alert-info {
   background-color: #eff6ff;
   border-color: #bfdbfe;
-  color: #1d4ed8;
+  color: #1e40af;
 }
 
 /* Loading Spinner */

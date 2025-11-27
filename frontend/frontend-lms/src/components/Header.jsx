@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 
 const Header = () => {
-  const { user, isAuthenticated, logout, isAdmin } = useAuth();
+  const { user, isAuthenticated, logout, isAdmin, isTeacher } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -34,6 +34,15 @@ const Header = () => {
                 >
                   📚 Mis Cursos
                 </Link>
+
+                {isTeacher() && (
+                  <Link
+                    to="/create-course"
+                    className="text-gray-300 hover:text-white transition-all font-medium"
+                  >
+                    ➕ Crear Curso
+                  </Link>
+                )}
 
                 {isAdmin() && (
                   <Link

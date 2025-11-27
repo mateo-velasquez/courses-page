@@ -7,9 +7,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTeacherUser, setIsTeacherUser] = useState(false);
 
   useEffect(() => {
-    const initAuth = () => {
+    const initAuth = async () => {
       // Clean up any invalid localStorage data first
       const userStr = localStorage.getItem('user');
       if (userStr === 'undefined' || userStr === 'null') {
@@ -22,6 +23,13 @@ export const AuthProvider = ({ children }) => {
       
       setUser(currentUser);
       setIsAuthenticated(authenticated);
+      
+      // Check if user is teacher
+      if (authenticated && currentUser) {
+        const teacherStatus = await authService.isTeacher();
+        setIsTeacherUser(teacherStatus);
+      }
+      
       setIsLoading(false);
     };
 
@@ -32,6 +40,11 @@ export const AuthProvider = ({ children }) => {
     const response = await authService.login(email, password);
     setUser(response.user);
     setIsAuthenticated(true);
+    
+    // Check teacher status after login
+    const teacherStatus = await authService.isTeacher();
+    setIsTeacherUser(teacherStatus);
+    
     return response;
   };
 
@@ -39,10 +52,15 @@ export const AuthProvider = ({ children }) => {
     authService.logout();
     setUser(null);
     setIsAuthenticated(false);
+    setIsTeacherUser(false);
   };
 
   const isAdmin = () => {
     return authService.isAdmin();
+  };
+
+  const isTeacher = () => {
+    return isTeacherUser;
   };
 
   const value = {
@@ -52,6 +70,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isAdmin,
+    isTeacher,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
