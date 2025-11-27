@@ -183,6 +183,18 @@ const CourseDetail = () => {
           {/* Main Course Info */}
           <div className="lg:col-span-2">
             <Card>
+              {course.image_url && (
+                <div className="w-full h-64 overflow-hidden rounded-t-lg">
+                  <img
+                    src={`http://localhost:8090${course.image_url}`}
+                    alt={course.course_name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
               <Card.Body>
                 <h1 className="text-3xl font-bold mb-4">{course.course_name}</h1>
                 

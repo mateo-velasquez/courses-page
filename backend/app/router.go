@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	router *gin.Engine // Declares a variable router of type *gin.Engine (a pointer to an instance of the gin engine).
+	router *gin.Engine // Declare a variable router of type *gin.Engine (a pointer to an instance of the gin engine).
 )
 
 func init() {
@@ -22,6 +22,9 @@ func init() {
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
 	router.Use(cors.New(config))
 	// Adds CORS middleware with custom settings to allow frontend connections.
+
+	// Serve static files from Images directory
+	router.Static("/images", "./images")
 }
 
 func StartRoute() {

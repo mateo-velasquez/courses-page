@@ -13,7 +13,7 @@ import (
 
 // Function that returns a course by the id
 func GetCourseById(c *gin.Context) {
-	var courseDto dto.CourseDTO
+	var courseDto dto.CourseImageDTO
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	courseDto, err := service.CourseService.GetCourseById(id)
@@ -28,7 +28,7 @@ func GetCourseById(c *gin.Context) {
 
 // Function that returns all the courses
 func GetCourses(c *gin.Context) {
-	var coursesDto dto.CoursesDTO
+	var coursesDto dto.CoursesImageDTO
 
 	coursesDto, err := service.CourseService.GetCourses()
 	if err != nil {

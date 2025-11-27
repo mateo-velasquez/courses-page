@@ -28,7 +28,7 @@ const Home = () => {
       const data = await courseService.getCourses();
       setCourses(data || []);
     } catch (error) {
-      setAlert({ type: 'error', message: 'Error al cargar los cursos' });
+      setAlert({ type: 'error', message: error.message || 'Error al cargar los cursos' });
     } finally {
       setIsLoading(false);
     }
@@ -40,12 +40,14 @@ const Home = () => {
       setCategories(data || []);
     } catch (error) {
       console.error('Error loading categories:', error);
+      setAlert({ type: 'error', message: error.message || 'Error al cargar las categorías' });
     }
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!searchQuery.trim()) {
+    // Si no hay búsqueda ni categorías seleccionadas, obtener todos los cursos
+    if (!searchQuery.trim() && selectedCategories.length === 0) {
       fetchCourses();
       return;
     }
@@ -55,18 +57,33 @@ const Home = () => {
       const data = await courseService.searchCourses(searchQuery, selectedCategories);
       setCourses(data || []);
     } catch (error) {
-      setAlert({ type: 'error', message: 'Error al buscar cursos' });
+      setAlert({ type: 'error', message: error.message || 'Error al buscar cursos' });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategories(prev => 
-      prev.includes(categoryId)
-        ? prev.filter(id => id !== categoryId)
-        : [...prev, categoryId]
-    );
+  const handleCategoryChange = async (categoryId) => {
+    const newCategories = selectedCategories.includes(categoryId)
+      ? selectedCategories.filter(id => id !== categoryId)
+      : [...selectedCategories, categoryId];
+    
+    setSelectedCategories(newCategories);
+    
+    // Aplicar filtros automáticamente
+    if (newCategories.length === 0 && !searchQuery.trim()) {
+      fetchCourses();
+    } else {
+      setIsLoading(true);
+      try {
+        const data = await courseService.searchCourses(searchQuery, newCategories);
+        setCourses(data || []);
+      } catch (error) {
+        setAlert({ type: 'error', message: error.message || 'Error al filtrar cursos' });
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const handleEnroll = async (course) => {
@@ -83,7 +100,7 @@ const Home = () => {
       });
       setAlert({ type: 'success', message: `Te has inscrito exitosamente en ${course.course_name}` });
     } catch (error) {
-      setAlert({ type: 'error', message: 'Error al inscribirse al curso' });
+      setAlert({ type: 'error', message: error.message || 'Error al inscribirse al curso' });
     }
   };
 

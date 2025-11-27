@@ -65,9 +65,10 @@ func (s *subscriptionService) InsertSubscription(subscriptionDTO dto.Subscriptio
 func (s *subscriptionService) GetSubscriptions() (dto.SubscriptionsDTO, error) {
 	var subscriptionsDTO dto.SubscriptionsDTO
 	var subscriptions model.Subscriptions = client.GetSubscriptions()
-	var subscriptionDTO dto.SubscriptionDTO
 
 	for _, subscription := range subscriptions {
+		var subscriptionDTO dto.SubscriptionDTO
+
 		subscriptionDTO.IDSubscription = subscription.IDSubscription
 		subscriptionDTO.IDCourse = subscription.IDCourse
 		subscriptionDTO.IDUser = subscription.IDUser
@@ -112,9 +113,10 @@ func (s *subscriptionService) GetSubscriptionById(id int) (dto.SubscriptionDTO, 
 func (s *subscriptionService) GetSubscriptionsByUserId(userId int) (dto.SubscriptionsDTO, error) {
 	var subscriptionsDTO dto.SubscriptionsDTO
 	var subscriptions model.Subscriptions = client.GetSubscriptionsByUserId(userId)
-	var subscriptionDTO dto.SubscriptionDTO
 
 	for _, subscription := range subscriptions {
+		var subscriptionDTO dto.SubscriptionDTO
+
 		subscriptionDTO.IDSubscription = subscription.IDSubscription
 		subscriptionDTO.IDCourse = subscription.IDCourse
 		subscriptionDTO.IDUser = subscription.IDUser
@@ -133,9 +135,10 @@ func (s *subscriptionService) GetSubscriptionsByUserId(userId int) (dto.Subscrip
 func (s *subscriptionService) GetSubscriptionsByCourseId(courseId int) (dto.SubscriptionsDTO, error) {
 	var subscriptionsDTO dto.SubscriptionsDTO
 	var subscriptions model.Subscriptions = client.GetSubscriptionsByCourseId(courseId)
-	var subscriptionDTO dto.SubscriptionDTO
 
 	for _, subscription := range subscriptions {
+		var subscriptionDTO dto.SubscriptionDTO
+
 		subscriptionDTO.IDSubscription = subscription.IDSubscription
 		subscriptionDTO.IDCourse = subscription.IDCourse
 		subscriptionDTO.IDUser = subscription.IDUser
