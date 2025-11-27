@@ -25,6 +25,7 @@ func init() {
 
 	// Serve static files from Images directory
 	router.Static("/images", "./images")
+	router.Static("/files", "./files")
 }
 
 func StartRoute() {

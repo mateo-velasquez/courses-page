@@ -52,7 +52,7 @@ func (s *imageService) GetImageById(id int) (dto.ImageDTO, error) {
 	}
 
 	imageDTO.ImageId = image.ImageId
-	imageDTO.ImagePath = image.ImagePath
+	imageDTO.ImagePath = "/" + image.ImagePath
 
 	return imageDTO, nil
 }
@@ -64,11 +64,12 @@ func (s *imageService) GetIdMayor() (id int) {
 func (s *imageService) GetImages() (dto.ImagesDTO, error) {
 	var images model.Images = client.GetImages()
 	var imagesDTO dto.ImagesDTO
-	var imageDTO dto.ImageDTO
 
 	for _, image := range images {
+		var imageDTO dto.ImageDTO
+
 		imageDTO.ImageId = image.ImageId
-		imageDTO.ImagePath = image.ImagePath
+		imageDTO.ImagePath = "/" + image.ImagePath
 
 		imagesDTO = append(imagesDTO, imageDTO)
 	}
