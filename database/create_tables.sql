@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS files (
     file_name VARCHAR(300) NOT NULL,
     file_path VARCHAR(255) NOT NULL,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    upload_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    lastupdate_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (subscription_id) REFERENCES subscriptions(subscription_id) ON DELETE CASCADE
 );
 
@@ -100,7 +100,7 @@ FOR EACH ROW
 BEGIN
     DECLARE avg_rating DECIMAL(3,2);
 
-    IF NOT (NEW.individual_rating <=> OLD.individual_rating) THEN
+    IF NEW.individual_rating <=> OLD.individual_rating THEN
         SELECT AVG(individual_rating) INTO avg_rating
         FROM subscriptions
         WHERE course_id = NEW.course_id;
