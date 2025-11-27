@@ -30,10 +30,6 @@ func (s *imageService) InsertImage(imageDTO dto.ImageDTO) (dto.ImageDTO, error) 
 
 	image = client.InsertImage(image)
 
-	if image.ImageId < 0 {
-		return imageDTO, errors.New("could not insert image")
-	}
-
 	return imageDTO, nil
 }
 
@@ -43,15 +39,15 @@ func (s *imageService) GetImageById(id int) (dto.ImageDTO, error) {
 
 	image = client.GetImageById(id)
 
-	if image.ImageId == 0 {
+	if image.IDImage == 0 {
 		return imageDTO, errors.New("image not found")
 	}
 
-	if image.ImageId < 0 {
+	if image.IDImage < 0 {
 		return imageDTO, errors.New("wrong ID")
 	}
 
-	imageDTO.ImageId = image.ImageId
+	imageDTO.IDImage = image.IDImage
 	imageDTO.ImagePath = image.ImagePath
 
 	return imageDTO, nil
@@ -67,7 +63,7 @@ func (s *imageService) GetImages() (dto.ImagesDTO, error) {
 	var imageDTO dto.ImageDTO
 
 	for _, image := range images {
-		imageDTO.ImageId = image.ImageId
+		imageDTO.IDImage = image.IDImage
 		imageDTO.ImagePath = image.ImagePath
 
 		imagesDTO = append(imagesDTO, imageDTO)

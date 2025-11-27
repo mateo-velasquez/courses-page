@@ -14,7 +14,7 @@ func init() {
 	router = gin.Default()
 	// Initializes the router with gin's default configurations.
 	// This includes middleware like the logger and the panic recovery handler.
-
+	
 	// Configure CORS to allow frontend connections
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://frontend:5173"}
@@ -22,7 +22,7 @@ func init() {
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
 	router.Use(cors.New(config))
 	// Adds CORS middleware with custom settings to allow frontend connections.
-
+	
 	// Serve static files from Images directory
 	router.Static("/images", "./Images")
 }

@@ -39,8 +39,12 @@ export const useAuth = () => {
     setIsAuthenticated(false);
   };
 
-  const isAdmin = () => {
+    const isAdmin = () => {
     return authService.isAdmin();
+  };
+
+  const isTeacher = () => {
+    return authService.isTeacher();
   };
 
   return {
@@ -50,6 +54,7 @@ export const useAuth = () => {
     login,
     logout,
     isAdmin,
+    isTeacher,
   };
 };
 
