@@ -2,7 +2,7 @@ services:
   database:
     build: ./database
     env_file:
-      - ./.env
+      - ./backend/.env
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -21,7 +21,7 @@ services:
   backend:
     build: ./backend
     env_file:
-      - ./.env
+      - ./backend/.env
       - ./backend/db/.env
     depends_on:
       database:

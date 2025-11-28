@@ -8,11 +8,10 @@ import (
 
 func InsertImage(image model.Image) model.Image {
 
-	result := Db.Debug().Create(&image)
+	result := Db.Create(&image)
 
 	if result.Error != nil {
 		log.Error("Failed to insert image")
-		image.ImageId = -1
 		return image
 	}
 
@@ -39,18 +38,14 @@ func GetImages() model.Images {
 }
 
 func GetIdMayor() int {
-	var image model.Image
+	var maxID int
+	result := Db.Table("images").Select("MAX(image_id)").Scan(&maxID)
 
-	// Buscamos un solo registro, ordenado del más grande al más chico
-	result := Db.Order("image_id desc").First(&image)
-
-	// Si hay error (ej. tabla vacía), devolvemos 0.
-	// El controlador sumará 1 y la primera imagen será Image-1.jpg (correcto)
 	if result.Error != nil {
-		log.Error("No se encontró ID mayor (puede que la tabla esté vacía): ", result.Error)
+		log.Error("Failed to retrieve maximum ID")
 		return 0
 	}
 
-	log.Debug("Maximum ID found: ", image.ImageId)
-	return image.ImageId
+	log.Debug("Maximum ID: ", maxID)
+	return maxID
 }

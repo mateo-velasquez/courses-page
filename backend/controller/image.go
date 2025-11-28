@@ -32,14 +32,13 @@ func InsertImage(c *gin.Context) {
 
 	// Obtiene el ID mayor para generar el nombre del archivo
 	i := service.ImageService.GetIdMayor()
-	print("id mayor: ", i)
 
 	// Genera el nombre del archivo con la extensión original
 	fileExtension := filepath.Ext(file.Filename)
 	fileName := fmt.Sprintf("Image-%d%s", i+1, fileExtension)
 
 	// Guarda el archivo en el directorio "Images/"
-	savePath := filepath.Join("images", fileName)
+	savePath := filepath.Join("Images", fileName)
 	if err := c.SaveUploadedFile(file, savePath); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
 		return
@@ -52,8 +51,6 @@ func InsertImage(c *gin.Context) {
 
 	// Inserta la información de la imagen en la base de datos
 	savedImageDto, err := service.ImageService.InsertImage(imageDto)
-
-	// Comunicar si hubo un problema
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

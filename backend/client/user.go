@@ -66,20 +66,3 @@ func UserLogin(email string) model.User {
 
 	return user
 }
-
-func GetUserBySubscriptionId(subscriptionId int) model.User {
-	var user model.User
-
-	result := Db.Table("users").
-		Joins("JOIN subscriptions ON subscriptions.user_id = users.user_id").
-		Where("subscriptions.subscription_id = ?", subscriptionId).
-		First(&user)
-
-	if result.Error != nil {
-		log.Error("Failed to find User by Subscription ID.")
-		user.IDUser = -1
-		return user
-	}
-	log.Debug("User by Subscription ID: ", user)
-	return user
-}

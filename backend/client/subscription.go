@@ -84,47 +84,61 @@ func GetSubscriptionsByCourseId(courseId int) model.Subscriptions {
 }
 
 func PutRating(subscription model.Subscription) model.Subscription {
+	var original model.Subscription
 
 	// Primero buscamos el subscription original
-	result := Db.Table("subscriptions").
-		Where("subscription_id = ?", subscription.IDSubscription).
-		Update("individual_rating", subscription.IndividualRating)
+	result := Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
 
 	if result.Error != nil {
-		log.Error("Failed to Save Subscription rating.")
-		subscription.IDSubscription = -2 // Código de error interno
+		log.Error("Failed to find Subscription.")
+		subscription.IDSubscription = -1
 		return subscription
 	}
 
-	// Verificamos si realmente se actualizó algo (si el ID existía)
-	if result.RowsAffected == 0 {
-		log.Error("Subscription not found to update.")
-		subscription.IDSubscription = -1 // Código para "No encontrado"
+	// Actualizamos solo el rating usando Updates con WHERE explícito
+	change := Db.Model(&model.Subscription{}).Where("subscription_id = ?", subscription.IDSubscription).Updates(map[string]interface{}{
+		"individual_rating": subscription.IndividualRating,
+	})
+
+	if change.Error != nil {
+		log.Error("Failed to Update Subscription: ", change.Error)
+		subscription.IDSubscription = -2
 		return subscription
 	}
 
-	return subscription
+	// Recargamos el objeto actualizado para obtener lastupdate_date actualizado
+	Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
+
+	// Devolvemos el objeto actualizado
+	return original
 }
 
 func PutComment(subscription model.Subscription) model.Subscription {
+	var original model.Subscription
 
 	// Primero buscamos el subscription original
-	result := Db.Table("subscriptions").
-		Where("subscription_id = ?", subscription.IDSubscription).
-		Update("comment", subscription.Comment)
+	result := Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
 
 	if result.Error != nil {
-		log.Error("Failed to Save Subscription comment.")
-		subscription.IDSubscription = -2 // Código de error interno
+		log.Error("Failed to find Subscription.")
+		subscription.IDSubscription = -1
 		return subscription
 	}
 
-	// Verificamos si realmente se actualizó algo (si el ID existía)
-	if result.RowsAffected == 0 {
-		log.Error("Subscription not found to update.")
-		subscription.IDSubscription = -1 // Código para "No encontrado"
+	// Actualizamos solo el comentario usando Updates con WHERE explícito
+	change := Db.Model(&model.Subscription{}).Where("subscription_id = ?", subscription.IDSubscription).Updates(map[string]interface{}{
+		"comment": subscription.Comment,
+	})
+
+	if change.Error != nil {
+		log.Error("Failed to Update Subscription: ", change.Error)
+		subscription.IDSubscription = -2
 		return subscription
 	}
 
-	return subscription
+	// Recargamos el objeto actualizado para obtener lastupdate_date actualizado
+	Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
+
+	// Devolvemos el objeto actualizado
+	return original
 }

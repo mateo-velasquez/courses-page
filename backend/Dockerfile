@@ -7,6 +7,7 @@ RUN go mod init project
 RUN go mod tidy
 
 # Copy environment files
+COPY .env .env
 COPY db/.env db/.env
 
 RUN go build -o project .

@@ -32,7 +32,7 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
   return (
     <Card className="h-full flex flex-col">
       <Card.Body className="flex-1 flex gap-4">
-        {course.id_image && (
+        {course.image_url && (
           <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg">
             <img
               src={`http://localhost:8090${course.image_url}`}
@@ -68,7 +68,7 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
               {course.categories.map((category, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md"
+                  className="px-2 py-1 bg-gray-100 text-white text-xs rounded-md"
                 >
                   {category}
                 </span>

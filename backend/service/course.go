@@ -11,12 +11,11 @@ type courseService struct{}
 
 type courseServiceInterface interface {
 	InsertCourse(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
-	GetCourses() (dto.CoursesImageDTO, error)
-	GetCourseById(id int) (dto.CourseImageDTO, error)
-	SearchCourses(query string, categoryIDs []int) (dto.CoursesImageDTO, error)
+	GetCourses() (dto.CoursesDTO, error)
+	GetCourseById(id int) (dto.CourseDTO, error)
+	SearchCourses(query string, categoryIDs []int) (dto.CoursesDTO, error)
 	PutCourseById(courseDTO dto.CourseDTO) (dto.CourseDTO, error)
 	DeleteCourseById(id int) error
-	GetCourseComments(id int) (dto.ResponseCommentsDTO, error)
 }
 
 var CourseService courseServiceInterface
@@ -25,9 +24,9 @@ func init() {
 	CourseService = &courseService{}
 }
 
-func (s *courseService) GetCourseById(id int) (dto.CourseImageDTO, error) {
+func (s *courseService) GetCourseById(id int) (dto.CourseDTO, error) {
 	var course model.Course
-	var courseDTO dto.CourseImageDTO
+	var courseDTO dto.CourseDTO
 
 	if id <= 0 {
 		return courseDTO, errors.New("ID not found")
@@ -53,7 +52,7 @@ func (s *courseService) GetCourseById(id int) (dto.CourseImageDTO, error) {
 	if course.IDImage > 0 {
 		imageDTO, err := ImageService.GetImageById(course.IDImage)
 		if err == nil {
-			courseDTO.ImageURL = "/" + imageDTO.ImagePath
+			courseDTO.ImageURL = imageDTO.ImagePath
 		}
 	}
 
@@ -63,12 +62,12 @@ func (s *courseService) GetCourseById(id int) (dto.CourseImageDTO, error) {
 	return courseDTO, nil
 }
 
-func (s *courseService) GetCourses() (dto.CoursesImageDTO, error) {
+func (s *courseService) GetCourses() (dto.CoursesDTO, error) {
 	var courses model.Courses = client.GetCourses()
-	var coursesDTO dto.CoursesImageDTO
+	var coursesDTO dto.CoursesDTO
 
 	for _, course := range courses {
-		var courseDTO dto.CourseImageDTO
+		var courseDTO dto.CourseDTO
 
 		// I need to pass the data from the DTO to the DAO
 		courseDTO.IDCourse = course.IDCourse
@@ -80,16 +79,16 @@ func (s *courseService) GetCourses() (dto.CoursesImageDTO, error) {
 		courseDTO.InitDate = course.InitDate
 		courseDTO.Rating = course.Rating
 
-		for _, category := range course.Categories {
-			courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
-		}
-
 		// Get image URL
 		if course.IDImage > 0 {
 			imageDTO, err := ImageService.GetImageById(course.IDImage)
 			if err == nil {
-				courseDTO.ImageURL = "/" + imageDTO.ImagePath
+				courseDTO.ImageURL = imageDTO.ImagePath
 			}
+		}
+
+		for _, category := range course.Categories {
+			courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
 		}
 
 		coursesDTO = append(coursesDTO, courseDTO)
@@ -99,9 +98,9 @@ func (s *courseService) GetCourses() (dto.CoursesImageDTO, error) {
 	return coursesDTO, nil
 }
 
-func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.CoursesImageDTO, error) {
+func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.CoursesDTO, error) {
 	var courses model.Courses
-	var coursesDTO dto.CoursesImageDTO
+	var coursesDTO dto.CoursesDTO
 
 	if query == "" && len(categoryIDs) == 0 {
 		return coursesDTO, errors.New("course not found")
@@ -110,7 +109,7 @@ func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.Cour
 	courses = client.SearchCourses(query, categoryIDs)
 
 	for _, course := range courses {
-		var courseDTO dto.CourseImageDTO
+		var courseDTO dto.CourseDTO
 
 		courseDTO.IDCourse = course.IDCourse
 		courseDTO.IDImage = course.IDImage
@@ -121,16 +120,16 @@ func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.Cour
 		courseDTO.InitDate = course.InitDate
 		courseDTO.Rating = course.Rating
 
-		for _, category := range course.Categories {
-			courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
-		}
-
 		// Get image URL
 		if course.IDImage > 0 {
 			imageDTO, err := ImageService.GetImageById(course.IDImage)
 			if err == nil {
-				courseDTO.ImageURL = "/" + imageDTO.ImagePath
+				courseDTO.ImageURL = imageDTO.ImagePath
 			}
+		}
+
+		for _, category := range course.Categories {
+			courseDTO.Categories = append(courseDTO.Categories, category.CategoryName)
 		}
 
 		coursesDTO = append(coursesDTO, courseDTO)
@@ -234,34 +233,4 @@ func (s *courseService) DeleteCourseById(id int) error {
 	err := client.DeleteCourseById(course)
 
 	return err
-}
-
-func (s *courseService) GetCourseComments(id int) (dto.ResponseCommentsDTO, error) {
-	var commentsDTO dto.ResponseCommentsDTO
-	var subscriptions model.Subscriptions
-
-	if id <= 0 {
-		return commentsDTO, errors.New("wrong ID")
-	}
-
-	subscriptions = client.GetSubscriptionsByCourseId(id)
-
-	for _, subscription := range subscriptions {
-		var commentDTO dto.ResponseCommentDTO
-		commentDTO.IDSubscription = subscription.IDSubscription
-		commentDTO.Comment = subscription.Comment
-
-		if commentDTO.Comment != "" {
-			// Consulta el nombre y el apellido del usuario asociado a la suscripción
-			user := client.GetUserBySubscriptionId(subscription.IDUser)
-			username := user.FirstName + " " + user.LastName
-
-			// guarda el nombre en el response
-			commentDTO.Username = username
-
-			commentsDTO = append(commentsDTO, commentDTO)
-		}
-	}
-
-	return commentsDTO, nil
 }

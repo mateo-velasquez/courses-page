@@ -63,6 +63,19 @@ func GetUserById(c *gin.Context) {
 	c.JSON(http.StatusOK, userDto)
 }
 
+func IsUserTeacher(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	isTeacher, err := service.UserService.IsUserTeacher(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"is_teacher": isTeacher})
+}
+
 func GetUserByEmail(c *gin.Context) {
 	var userDto dto.UserDTO
 
@@ -108,7 +121,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"token": token,
 		"user":  userDto,
 	})

@@ -6,8 +6,10 @@ import CourseDetail from './pages/CourseDetail.jsx';
 import MyCourses from './pages/MyCourses.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import Register from './pages/Register.jsx';
+import CreateCourse from './pages/CreateCourse.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
+import TeacherRoute from './components/TeacherRoute.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <MyCourses />
           </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'create-course',
+        element: (
+          <TeacherRoute>
+            <CreateCourse />
+          </TeacherRoute>
         ),
       },
       {
