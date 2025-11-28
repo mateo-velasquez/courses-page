@@ -52,7 +52,7 @@ func (s *courseService) GetCourseById(id int) (dto.CourseDTO, error) {
 	if course.IDImage > 0 {
 		imageDTO, err := ImageService.GetImageById(course.IDImage)
 		if err == nil {
-			courseDTO.ImageURL = "/" + imageDTO.ImagePath + ".jpg"
+			courseDTO.ImageURL = imageDTO.ImagePath
 		}
 	}
 
@@ -83,7 +83,7 @@ func (s *courseService) GetCourses() (dto.CoursesDTO, error) {
 		if course.IDImage > 0 {
 			imageDTO, err := ImageService.GetImageById(course.IDImage)
 			if err == nil {
-				courseDTO.ImageURL = "/" + imageDTO.ImagePath + ".jpg"
+				courseDTO.ImageURL = imageDTO.ImagePath
 			}
 		}
 
@@ -124,7 +124,7 @@ func (s *courseService) SearchCourses(query string, categoryIDs []int) (dto.Cour
 		if course.IDImage > 0 {
 			imageDTO, err := ImageService.GetImageById(course.IDImage)
 			if err == nil {
-				courseDTO.ImageURL = "/" + imageDTO.ImagePath + ".jpg"
+				courseDTO.ImageURL = imageDTO.ImagePath
 			}
 		}
 

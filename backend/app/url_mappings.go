@@ -8,11 +8,11 @@ import (
 
 func mapUrls() {
 	//USER
-	router.POST("/user", controller.InsertUser)     //check
-	router.GET("/users", controller.GetUsers)       //check
-	router.GET("/user/:id", controller.GetUserById) //check
+	router.POST("/user", controller.InsertUser)                  //check
+	router.GET("/users", controller.GetUsers)                    //check
+	router.GET("/user/:id", controller.GetUserById)              //check
 	router.GET("/user/:id/is-teacher", controller.IsUserTeacher) //check if user is teacher
-	router.POST("/login", controller.UserLogin)     //check
+	router.POST("/login", controller.UserLogin)                  //check
 
 	//IMAGE
 	router.POST("/course/image", controller.InsertImage) // Este que sea para guardar una relación de imagen con curso // no check
@@ -44,6 +44,11 @@ func mapUrls() {
 	router.GET("/categories", controller.GetCategories)     //check
 
 	//FILES
+	router.POST("/course/file", controller.InsertImage) // Este que sea para guardar una relación de un archivo un con curso // no check
+	router.GET("/file/:id", controller.GetImageById)    //check
+	router.GET("/files", controller.GetImages)          //check
+	router.GET("subscription/:id/files", controller.GetFilesBySubscriptionId)
+	router.GET("course/:id/files", controller.GetFilesByCourseId)
 
 	log.Info("Finishing mappings configurations")
 }

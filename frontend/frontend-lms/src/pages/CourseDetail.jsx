@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import Card from '../components/Card.jsx';
@@ -22,33 +22,23 @@ const CourseDetail = () => {
   
   // Comment and rating form
   const [comment, setComment] = useState('');
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(5.0);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
 
-  useEffect(() => {
-    fetchCourseDetails();
-  }, [id]);
-
-  useEffect(() => {
-    if (course && isAuthenticated) {
-      fetchSubscriptions();
-    }
-  }, [course, isAuthenticated]);
-
-  const fetchCourseDetails = async () => {
+  const fetchCourseDetails = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await courseService.getCourseById(id);
       setCourse(data);
-    } catch (error) {
+    } catch {
       setAlert({ type: 'error', message: 'Error al cargar el curso' });
       navigate('/');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id, navigate]);
 
-  const fetchSubscriptions = async () => {
+  const fetchSubscriptions = useCallback(async () => {
     try {
       const [courseSubscriptions, userSubscriptions] = await Promise.all([
         subscriptionService.getSubscriptionsByCourseId(id),
@@ -63,13 +53,23 @@ const CourseDetail = () => {
         
         if (currentUserSub) {
           setComment(currentUserSub.comment || '');
-          setRating(currentUserSub.individual_rating || 5);
+          setRating(currentUserSub.individual_rating || 5.0);
         }
       }
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
     }
-  };
+  }, [id, user]);
+
+  useEffect(() => {
+    fetchCourseDetails();
+  }, [fetchCourseDetails]);
+
+  useEffect(() => {
+    if (course && isAuthenticated) {
+      fetchSubscriptions();
+    }
+  }, [course, isAuthenticated, fetchSubscriptions]);
 
   const handleEnroll = async () => {
     if (!isAuthenticated) {
@@ -87,7 +87,7 @@ const CourseDetail = () => {
       
       setAlert({ type: 'success', message: 'Te has inscrito exitosamente al curso' });
       fetchSubscriptions(); // Refresh subscriptions
-    } catch (error) {
+    } catch {
       setAlert({ type: 'error', message: 'Error al inscribirse al curso' });
     } finally {
       setIsEnrolling(false);
@@ -102,6 +102,10 @@ const CourseDetail = () => {
       return;
     }
 
+    if (isSubmittingFeedback) {
+      return; // Prevent multiple submissions
+    }
+
     setIsSubmittingFeedback(true);
     try {
       await Promise.all([
@@ -110,8 +114,23 @@ const CourseDetail = () => {
       ]);
       
       setAlert({ type: 'success', message: 'Tu comentario y valoración han sido guardados' });
-      fetchSubscriptions(); // Refresh to show updated data
-    } catch (error) {
+      
+      // Update local state instead of fetching all subscriptions again
+      setUserSubscription({
+        ...userSubscription,
+        comment: comment,
+        individual_rating: rating
+      });
+      
+      // Update the subscriptions list to reflect changes
+      setSubscriptions(prevSubs => 
+        prevSubs.map(sub => 
+          sub.id === userSubscription.id 
+            ? { ...sub, comment: comment, individual_rating: rating }
+            : sub
+        )
+      );
+    } catch {
       setAlert({ type: 'error', message: 'Error al guardar tu comentario' });
     } finally {
       setIsSubmittingFeedback(false);
@@ -131,9 +150,9 @@ const CourseDetail = () => {
 
   const renderStars = (rating) => {
     const stars = [];
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= rating; i++) {
       stars.push(
-        <span key={i} className={i <= rating ? 'text-yellow-500' : 'text-gray-300'}>
+        <span key={i} className="text-yellow-500">
           ⭐
         </span>
       );
@@ -321,7 +340,7 @@ const CourseDetail = () => {
                       <label className="form-label">Valoración</label>
                       <select
                         value={rating}
-                        onChange={(e) => setRating(parseInt(e.target.value))}
+                        onChange={(e) => setRating(parseFloat(e.target.value))}
                         className="form-select"
                       >
                         {[1, 2, 3, 4, 5].map(num => (
@@ -330,6 +349,9 @@ const CourseDetail = () => {
                           </option>
                         ))}
                       </select>
+                      <div className="flex items-center gap-1 mt-2">
+                        {renderStars(rating)}
+                      </div>
                     </div>
 
                     <Input

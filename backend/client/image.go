@@ -15,7 +15,7 @@ func InsertImage(image model.Image) model.Image {
 		return image
 	}
 
-	log.Debug("Image created:", image.IDImage)
+	log.Debug("Image created:", image.ImageId)
 	return image
 }
 
