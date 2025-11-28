@@ -28,6 +28,7 @@ func (s *fileService) InsertFile(fileDTO dto.FileDTO) (dto.FileDTO, error) {
 
 	// asigno los parámetros que estoy pasando
 	file.FilePath = fileDTO.FilePath
+	file.FileName = fileDTO.FileName
 	file.SubscriptionId = fileDTO.SubscriptionId
 
 	// llamo al client para que lo cargue y traiga el resto de los datos
