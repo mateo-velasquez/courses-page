@@ -29,7 +29,7 @@ func init() {
 func (s *userService) InsertUser(userDTO dto.UserDTO) (dto.UserDTO, error) {
 	var user model.User
 
-	// Estamos encriptando la contraseña, para no guardar la verdadera
+	// Estamos encriptando la contrasenia, para no guardar la verdadera
 	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(userDTO.UserPassword), bcrypt.DefaultCost)
 
 	if err != nil {
@@ -137,7 +137,7 @@ func (s *userService) UserLogin(userDTO dto.UserDTO) (dto.UserDTO, error) {
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.UserPassword), []byte(userDTO.UserPassword))
 	if err != nil {
-		// pasa cuando no son iguales las contraseñas
+		// pasa cuando no son iguales las contrasenias
 		return userDTO, errors.New("wrong password")
 	}
 

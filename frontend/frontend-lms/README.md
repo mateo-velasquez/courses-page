@@ -123,7 +123,7 @@ El proyecto utiliza CSS puro con un sistema de clases utilitarias inspirado en T
 
 El frontend se comunica con el backend Go a través de endpoints REST para gestionar usuarios, cursos, suscripciones y categorías.
 
-## 📱 Diseño Responsivo
+## 📱 Disenio Responsivo
 
 Completamente optimizado para desktop, tablet y dispositivos móviles.
 

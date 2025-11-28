@@ -7,13 +7,13 @@ const Input = ({
 }) => {
   const inputElement = type === 'textarea' ? (
     <textarea
-      className={`form-input form-textarea ${error ? 'border-danger' : ''} ${className}`}
+      className={`form-input form-textarea text-white ${error ? 'border-danger' : ''} ${className}`}
       {...props}
     />
   ) : (
     <input
       type={type}
-      className={`form-input ${error ? 'border-danger' : ''} ${className}`}
+      className={`form-input text-white ${error ? 'border-danger' : ''} ${className}`}
       {...props}
     />
   );

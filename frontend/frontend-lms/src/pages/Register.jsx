@@ -69,15 +69,15 @@ const Register = () => {
     }
 
     if (!formData.userpassword) {
-      newErrors.userpassword = 'La contraseña es requerida';
+      newErrors.userpassword = 'La contrasenia es requerida';
     } else if (formData.userpassword.length < 4) {
-      newErrors.userpassword = 'La contraseña debe tener al menos 4 caracteres';
+      newErrors.userpassword = 'La contrasenia debe tener al menos 4 caracteres';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirma tu contraseña';
+      newErrors.confirmPassword = 'Confirma tu contrasenia';
     } else if (formData.userpassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Las contraseñas no coinciden';
+      newErrors.confirmPassword = 'Las contrasenias no coinciden';
     }
 
     setErrors(newErrors);
@@ -193,7 +193,7 @@ const Register = () => {
               />
 
               <Input
-                label="Contraseña"
+                label="Contrasenia"
                 type="password"
                 name="userpassword"
                 placeholder="Mínimo 6 caracteres"
@@ -204,10 +204,10 @@ const Register = () => {
               />
 
               <Input
-                label="Confirmar Contraseña"
+                label="Confirmar Contrasenia"
                 type="password"
                 name="confirmPassword"
-                placeholder="Repite tu contraseña"
+                placeholder="Repite tu contrasenia"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 error={errors.confirmPassword}

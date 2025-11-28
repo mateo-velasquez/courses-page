@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Card from './Card.jsx';
 import Button from './Button.jsx';
 
-const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
+const CourseCard = ({ course, onEnroll, showEnrollButton = true, isEnrolled = false }) => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -99,13 +99,23 @@ const CourseCard = ({ course, onEnroll, showEnrollButton = true }) => {
             Ver Detalles
           </Link>
           {showEnrollButton && onEnroll && (
-            <Button
-              onClick={() => onEnroll(course)}
-              variant="primary"
-              className="flex-1"
-            >
-              Inscribirse
-            </Button>
+            isEnrolled ? (
+              <button
+                disabled
+                className="px-4 py-2 rounded-lg text-white font-medium cursor-not-allowed flex-1"
+                style={{ backgroundColor: 'var(--color-gray-300)' }}
+              >
+                Ya te has inscripto a este curso
+              </button>
+            ) : (
+              <Button
+                onClick={() => onEnroll(course)}
+                variant="primary"
+                className="flex-1"
+              >
+                Inscribirse
+              </Button>
+            )
           )}
         </div>
       </Card.Footer>

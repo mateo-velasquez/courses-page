@@ -11,7 +11,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gray-800 shadow-lg border-b border-gray-700">
+    <header className="bg-gray-800/80 backdrop-blur-md shadow-lg border-b border-gray-700 sticky top-0 z-50">
       <div className="container">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
@@ -22,25 +22,25 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="flex items-center gap-8">
-            <Link to="/" className="text-gray-300 hover:text-white transition-all font-medium">
-              🏠 Inicio
+            <Link to="/" className="text-white hover:text-white transition-all font-medium">
+              Inicio
             </Link>
 
             {isAuthenticated ? (
               <>
                 <Link
                   to="/my-courses"
-                  className="text-gray-300 hover:text-white transition-all font-medium"
+                  className="text-white hover:text-white transition-all font-medium"
                 >
-                  📚 Mis Cursos
+                  Mis Cursos
                 </Link>
 
                 {isTeacher() && (
                   <Link
                     to="/create-course"
-                    className="text-gray-300 hover:text-white transition-all font-medium"
+                    className="text-white hover:text-white transition-all font-medium"
                   >
-                    ➕ Crear Curso
+                    Crear Curso
                   </Link>
                 )}
 
@@ -54,7 +54,7 @@ const Header = () => {
                 )}
 
                 <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-300">
+                  <span className="text-sm text-gray-500">
                     Hola, <span className="text-white font-medium">{user?.first_name}</span>
                   </span>
                   <button

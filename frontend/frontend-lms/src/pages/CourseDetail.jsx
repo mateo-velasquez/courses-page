@@ -89,7 +89,7 @@ const CourseDetail = () => {
       fetchSubscriptions(); // Refresh subscriptions
     } catch {
       setAlert({ type: 'error', message: 'Error al inscribirse al curso' });
-    } finally {
+      } finally {
       setIsEnrolling(false);
     }
   };
@@ -291,18 +291,13 @@ const CourseDetail = () => {
 
                 {isAuthenticated ? (
                   userSubscription ? (
-                    <div className="text-center">
-                      <div className="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
-                        ✅ Ya estás inscrito en este curso
-                      </div>
-                      <Button
-                        onClick={() => navigate('/my-courses')}
-                        variant="outline"
-                        className="w-full"
-                      >
-                        Ver Mis Cursos
-                      </Button>
-                    </div>
+                    <button
+                      disabled
+                      className="w-full px-4 py-2 rounded-lg text-white font-medium cursor-not-allowed"
+                      style={{ backgroundColor: 'var(--color-gray-300)' }}
+                    >
+                      Ya te has inscripto a este curso
+                    </button>
                   ) : (
                     <Button
                       onClick={handleEnroll}
