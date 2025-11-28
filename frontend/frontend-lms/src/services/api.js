@@ -4,7 +4,6 @@ const API_BASE_URL = isDocker ? 'http://backend:8090' : 'http://localhost:8090';
 
 export const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
-  
   const defaultOptions = {
     headers: {
       'Content-Type': 'application/json',
@@ -17,18 +16,24 @@ export const apiRequest = async (endpoint, options = {}) => {
     defaultOptions.headers['Authorization'] = `Bearer ${token}`;
   }
 
+  // Mezclar opciones
   const config = {
     ...defaultOptions,
     ...options,
     headers: {
       ...defaultOptions.headers,
-      ...options.headers,
+      ...(options.headers || {}),
     },
   };
 
+  // CLAVE: si el body es FormData, sacamos el Content-Type JSON
+  if (config.body instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
+
   try {
     const response = await fetch(url, config);
-    
+
     if (!response.ok) {
       let errorData;
       try {

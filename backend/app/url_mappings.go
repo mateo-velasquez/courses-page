@@ -44,9 +44,9 @@ func mapUrls() {
 	router.GET("/categories", controller.GetCategories)     //check
 
 	//FILES
-	router.POST("/course/file", controller.InsertImage) // Este que sea para guardar una relación de un archivo un con curso // no check
-	router.GET("/file/:id", controller.GetImageById)    //check
-	router.GET("/files", controller.GetImages)          //check
+	router.POST("/course/subscription/:id/files", controller.InsertFile) // Este que sea para guardar una relación de un archivo un con curso // no check
+	router.GET("/file/:id", controller.GetFileById)                      //check
+	router.GET("/files", controller.GetFiles)                            //check
 	router.GET("subscription/:id/files", controller.GetFilesBySubscriptionId)
 	router.GET("course/:id/files", controller.GetFilesByCourseId)
 

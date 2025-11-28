@@ -5,32 +5,46 @@ import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
 import Alert from '../components/Alert.jsx';
 import Input from '../components/Input.jsx';
+
 import courseService from '../services/courseService.js';
 import subscriptionService from '../services/subscriptionService.js';
+import fileService from '../services/fileService.js'; // 👈 servicio de archivos
 
 const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
-  
+
+  const { isAuthenticated, user, isAdmin } = useAuth();
+  const isAdminUser = isAdmin ? isAdmin() : false;
+
   const [course, setCourse] = useState(null);
   const [subscriptions, setSubscriptions] = useState([]);
   const [userSubscription, setUserSubscription] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [alert, setAlert] = useState(null);
-  
-  // Comment and rating form
+
+  // Comentario y rating
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(5.0);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+
+  // 🔹 Archivos
+  const [files, setFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  // ==========================
+  //   CARGA DE DATOS
+  // ==========================
 
   const fetchCourseDetails = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await courseService.getCourseById(id);
       setCourse(data);
-    } catch {
+    } catch (error) {
+      console.error(error);
       setAlert({ type: 'error', message: 'Error al cargar el curso' });
       navigate('/');
     } finally {
@@ -46,11 +60,13 @@ const CourseDetail = () => {
       ]);
 
       setSubscriptions(courseSubscriptions || []);
-      
-      if (userSubscriptions) {
-        const currentUserSub = userSubscriptions.find(sub => sub.id_course === parseInt(id));
+
+      if (userSubscriptions && userSubscriptions.length > 0) {
+        const currentUserSub = userSubscriptions.find(
+          (sub) => sub.id_course === parseInt(id)
+        );
         setUserSubscription(currentUserSub || null);
-        
+
         if (currentUserSub) {
           setComment(currentUserSub.comment || '');
           setRating(currentUserSub.individual_rating || 5.0);
@@ -71,6 +87,38 @@ const CourseDetail = () => {
     }
   }, [course, isAuthenticated, fetchSubscriptions]);
 
+  // 🔹 Cargar archivos según rol
+  useEffect(() => {
+    const loadFiles = async () => {
+      try {
+        // Admin: ve archivos del CURSO (todos los de las suscripciones de ese curso)
+        if (isAdminUser) {
+          const courseFiles = await fileService.getFilesByCourse(id);
+          setFiles(courseFiles || []);
+        } 
+        // Alumno inscripto: ve sus archivos asociados a SU subscription
+        else if (userSubscription) {
+          const subFiles = await fileService.getFilesBySubscription(
+            userSubscription.id
+          );
+          setFiles(subFiles || []);
+        }
+      } catch (error) {
+        console.error('Error al cargar archivos:', error);
+      }
+    };
+
+    if (isAuthenticated && (isAdminUser || userSubscription)) {
+      loadFiles();
+    } else {
+      setFiles([]);
+    }
+  }, [id, isAuthenticated, isAdminUser, userSubscription]);
+
+  // ==========================
+  //   ACCIONES
+  // ==========================
+
   const handleEnroll = async () => {
     if (!isAuthenticated) {
       setAlert({ type: 'warning', message: 'Debes iniciar sesión para inscribirte' });
@@ -84,12 +132,13 @@ const CourseDetail = () => {
         id_user: user.id,
         course_role: 'student',
       });
-      
+
       setAlert({ type: 'success', message: 'Te has inscrito exitosamente al curso' });
-      fetchSubscriptions(); // Refresh subscriptions
-    } catch {
+      fetchSubscriptions();
+    } catch (error) {
+      console.error(error);
       setAlert({ type: 'error', message: 'Error al inscribirse al curso' });
-      } finally {
+    } finally {
       setIsEnrolling(false);
     }
   };
@@ -102,9 +151,7 @@ const CourseDetail = () => {
       return;
     }
 
-    if (isSubmittingFeedback) {
-      return; // Prevent multiple submissions
-    }
+    if (isSubmittingFeedback) return;
 
     setIsSubmittingFeedback(true);
     try {
@@ -112,30 +159,77 @@ const CourseDetail = () => {
         subscriptionService.updateComment(userSubscription.id, comment),
         subscriptionService.updateRating(userSubscription.id, rating)
       ]);
-      
+
       setAlert({ type: 'success', message: 'Tu comentario y valoración han sido guardados' });
-      
-      // Update local state instead of fetching all subscriptions again
+
       setUserSubscription({
         ...userSubscription,
-        comment: comment,
+        comment,
         individual_rating: rating
       });
-      
-      // Update the subscriptions list to reflect changes
-      setSubscriptions(prevSubs => 
-        prevSubs.map(sub => 
-          sub.id === userSubscription.id 
-            ? { ...sub, comment: comment, individual_rating: rating }
+
+      setSubscriptions((prev) =>
+        prev.map((sub) =>
+          sub.id === userSubscription.id
+            ? { ...sub, comment, individual_rating: rating }
             : sub
         )
       );
-    } catch {
+    } catch (error) {
+      console.error(error);
       setAlert({ type: 'error', message: 'Error al guardar tu comentario' });
     } finally {
       setIsSubmittingFeedback(false);
     }
   };
+
+  // 🔹 SUBIDA DE ARCHIVOS (solo alumno)
+  const handleUploadFile = async (e) => {
+    e.preventDefault();
+
+    if (isAdminUser) {
+      setAlert({
+        type: 'info',
+        message: 'Los administradores solo pueden visualizar archivos, no subirlos.'
+      });
+      return;
+    }
+
+    if (!userSubscription) {
+      setAlert({
+        type: 'warning',
+        message: 'Debes estar inscrito en este curso para subir archivos.'
+      });
+      return;
+    }
+
+    if (!selectedFile) {
+      setAlert({ type: 'warning', message: 'Selecciona un archivo primero.' });
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+
+      await fileService.uploadFileForSubscription(userSubscription.id, selectedFile);
+
+      setAlert({ type: 'success', message: 'Archivo subido correctamente.' });
+      setSelectedFile(null);
+
+      // Recargar la lista de archivos del alumno
+      const subFiles = await fileService.getFilesBySubscription(userSubscription.id);
+      setFiles(subFiles || []);
+    } catch (error) {
+      console.error('Error al subir archivo:', error);
+      setAlert({ type: 'error', message: 'Error al subir el archivo.' });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // ==========================
+  //   HELPERS VISUALES
+  // ==========================
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
@@ -145,12 +239,13 @@ const CourseDetail = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return '';
     return new Date(dateString).toLocaleDateString('es-AR');
   };
 
-  const renderStars = (rating) => {
+  const renderStars = (ratingValue) => {
     const stars = [];
-    for (let i = 1; i <= rating; i++) {
+    for (let i = 1; i <= ratingValue; i++) {
       stars.push(
         <span key={i} className="text-yellow-500">
           ⭐
@@ -176,14 +271,16 @@ const CourseDetail = () => {
   if (!course) {
     return (
       <div className="container py-8">
-        <Alert type="error">
-          Curso no encontrado
-        </Alert>
+        <Alert type="error">Curso no encontrado</Alert>
       </div>
     );
   }
 
   const commentsWithRatings = getCommentsWithRatings();
+
+  // ==========================
+  //   RENDER
+  // ==========================
 
   return (
     <div className="py-8">
@@ -199,8 +296,9 @@ const CourseDetail = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Course Info */}
+          {/* Columna principal (info curso, comentarios, archivos) */}
           <div className="lg:col-span-2">
+            {/* Info del curso */}
             <Card>
               {course.image_url && (
                 <div className="w-full h-64 overflow-hidden rounded-t-lg">
@@ -248,7 +346,7 @@ const CourseDetail = () => {
               </Card.Body>
             </Card>
 
-            {/* Comments Section */}
+            {/* Comentarios y valoraciones */}
             {commentsWithRatings.length > 0 && (
               <Card className="mt-6">
                 <Card.Header>
@@ -275,11 +373,91 @@ const CourseDetail = () => {
                 </Card.Body>
               </Card>
             )}
+
+            {/* 🔹 Sección de archivos */}
+            {isAuthenticated && (isAdminUser || userSubscription) && (
+              <Card className="mt-6">
+                <Card.Header>
+                  <h3 className="text-xl font-semibold">
+                    Archivos del curso
+                  </h3>
+                </Card.Header>
+                <Card.Body>
+                  {/* Formulario de subida SOLO para alumno inscripto */}
+                  {!isAdminUser && userSubscription && (
+                    <form
+                      onSubmit={handleUploadFile}
+                      className="mb-4 space-y-3"
+                    >
+                      <Input
+                        label="Subir archivo"
+                        type="file"
+                        onChange={(e) =>
+                          setSelectedFile(
+                            e.target.files && e.target.files[0]
+                              ? e.target.files[0]
+                              : null
+                          )
+                        }
+                      />
+                      <Button
+                        type="submit"
+                        loading={isUploading}
+                        className="w-full"
+                      >
+                        Subir archivo
+                      </Button>
+                      <p className="text-xs text-gray">
+                        Puedes subir tareas, fotos, PDFs, etc.
+                      </p>
+                    </form>
+                  )}
+
+                  {/* Lista de archivos */}
+                  {files.length === 0 ? (
+                    <p className="text-sm text-gray">
+                      No hay archivos disponibles para este curso todavía.
+                    </p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {files.map((file) => (
+                        <li
+                          key={file.id}
+                          className="flex items-center justify-between bg-surface p-2 rounded"
+                        >
+                          <div>
+                            <p className="font-medium text-sm">
+                              {file.file_name}
+                            </p>
+                            <p className="text-xs text-gray">
+                              Subido el{' '}
+                              {formatDate(
+                                file.create_date
+                              )}
+                            </p>
+                          </div>
+                          <a
+                            href={`http://localhost:8090${
+                              file.file_path
+                            }`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary text-sm underline"
+                          >
+                            Visualizar
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </Card.Body>
+              </Card>
+            )}
           </div>
 
-          {/* Sidebar */}
+          {/* Sidebar derecha (precio, inscripción, valoración propia) */}
           <div>
-            {/* Enrollment Card */}
+            {/* Precio e inscripción */}
             <Card className="mb-6">
               <Card.Body>
                 <div className="text-center mb-4">
@@ -323,7 +501,7 @@ const CourseDetail = () => {
               </Card.Body>
             </Card>
 
-            {/* Comment and Rating Form */}
+            {/* Valoración propia */}
             {userSubscription && (
               <Card>
                 <Card.Header>
@@ -331,14 +509,16 @@ const CourseDetail = () => {
                 </Card.Header>
                 <Card.Body>
                   <form onSubmit={handleSubmitFeedback}>
-                    <div className="form-group">
+                    <div className="form-group mb-4">
                       <label className="form-label">Valoración</label>
                       <select
                         value={rating}
-                        onChange={(e) => setRating(parseFloat(e.target.value))}
+                        onChange={(e) =>
+                          setRating(parseFloat(e.target.value))
+                        }
                         className="form-select"
                       >
-                        {[1, 2, 3, 4, 5].map(num => (
+                        {[1, 2, 3, 4, 5].map((num) => (
                           <option key={num} value={num}>
                             {num} estrella{num > 1 ? 's' : ''}
                           </option>

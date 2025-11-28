@@ -24,16 +24,23 @@ func init() {
 }
 
 func (s *fileService) InsertFile(fileDTO dto.FileDTO) (dto.FileDTO, error) {
-
 	var file model.File
 
+	// asigno los parámetros que estoy pasando
 	file.FilePath = fileDTO.FilePath
+	file.FileName = fileDTO.FileName
+	file.SubscriptionId = fileDTO.SubscriptionId
 
+	// llamo al client para que lo cargue y traiga el resto de los datos
 	file = client.InsertFile(file)
 
 	if file.FileId < 0 {
 		return fileDTO, errors.New("could not insert file")
 	}
+
+	fileDTO.FileId = file.FileId
+	fileDTO.CreateDate = file.CreateDate
+	fileDTO.LastUpdateDate = file.LastUpdateDate
 
 	return fileDTO, nil
 }
