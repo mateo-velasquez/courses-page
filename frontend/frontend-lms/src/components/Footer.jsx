@@ -57,7 +57,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-700 mt-8 pt-6 text-center">
           <p className="text-gray-400">
-            © 2025 <span className="text-gradient font-semibold">Solaire</span>. Transformando desarrolladores. ⚡
+            © 2025 <span className="text-gradient font-semibold">Solaire</span>. Formando cocineros. 👨🏿‍🍳
           </p>
         </div>
       </div>
