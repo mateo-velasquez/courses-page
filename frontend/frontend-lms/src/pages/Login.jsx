@@ -52,9 +52,9 @@ const Login = () => {
     }
 
     if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
+      newErrors.password = 'La contrasenia es requerida';
     } else if (formData.password.length < 4) {
-      newErrors.password = 'La contraseña debe tener al menos 4 caracteres';
+      newErrors.password = 'La contrasenia debe tener al menos 4 caracteres';
     }
 
     setErrors(newErrors);
@@ -120,10 +120,10 @@ const Login = () => {
               />
 
               <Input
-                label="Contraseña"
+                label="Contrasenia"
                 type="password"
                 name="password"
-                placeholder="Ingresa tu contraseña"
+                placeholder="Ingresa tu contrasenia"
                 value={formData.password}
                 onChange={handleChange}
                 error={errors.password}

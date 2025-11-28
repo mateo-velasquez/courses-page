@@ -12,7 +12,7 @@ import (
 )
 
 func InsertFile(c *gin.Context) {
-
+	
 	subscription_id, er := strconv.Atoi(c.Param("id"))
 
 	if er != nil {

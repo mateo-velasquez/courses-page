@@ -9,7 +9,7 @@ const Footer = () => {
               <h3 className="text-xl font-bold text-gradient">Solaire</h3>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              La plataforma más completa para convertirte en desarrollador Full-Stack profesional.
+              La plataforma más completa para convertirte en chef.
             </p>
             <div className="flex gap-4 mt-4">
               <span className="text-2xl cursor-pointer hover:text-primary transition-all">📧</span>
@@ -57,7 +57,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-700 mt-8 pt-6 text-center">
           <p className="text-gray-400">
-            © 2025 <span className="text-gradient font-semibold">Solaire</span>. Transformando desarrolladores. ⚡
+            © 2025 <span className="text-gradient font-semibold">Solaire</span>. Formando cocineros. 👨🏿‍🍳
           </p>
         </div>
       </div>

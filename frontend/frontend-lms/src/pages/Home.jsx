@@ -16,11 +16,15 @@ const Home = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
+  const [userSubscriptions, setUserSubscriptions] = useState([]);
 
   useEffect(() => {
     fetchCourses();
     fetchCategories();
-  }, []);
+    if (isAuthenticated && user) {
+      fetchUserSubscriptions();
+    }
+  }, [isAuthenticated, user]);
 
   const fetchCourses = async () => {
     setIsLoading(true);
@@ -41,6 +45,15 @@ const Home = () => {
     } catch (error) {
       console.error('Error loading categories:', error);
       setAlert({ type: 'error', message: error.message || 'Error al cargar las categorías' });
+    }
+  };
+
+  const fetchUserSubscriptions = async () => {
+    try {
+      const data = await subscriptionService.getSubscriptionsByUserId(user.id);
+      setUserSubscriptions(data || []);
+    } catch (error) {
+      console.error('Error loading user subscriptions:', error);
     }
   };
 
@@ -99,9 +112,15 @@ const Home = () => {
         course_role: 'student',
       });
       setAlert({ type: 'success', message: `Te has inscrito exitosamente en ${course.course_name}` });
+      // Actualizar las suscripciones del usuario
+      fetchUserSubscriptions();
     } catch (error) {
       setAlert({ type: 'error', message: error.message || 'Error al inscribirse al curso' });
     }
+  };
+
+  const isUserEnrolled = (courseId) => {
+    return userSubscriptions.some(sub => sub.id_course === courseId);
   };
 
   const clearSearch = () => {
@@ -116,26 +135,14 @@ const Home = () => {
       <div className="hero-gradient py-20 px-4">
         <div className="container">
           <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 mt-6 leading-tight">
               Conviértete en
               <br />
-              <span className="text-gradient">Desarrollador Full-Stack</span>
+              <span className="text-gradient">Chef profesional</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
               Todo lo que necesitas aprender en un sólo lugar
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="btn btn-primary btn-lg pulse-glow px-8 py-4 text-lg">
-                Sé parte de la Academia
-                <span className="ml-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">Nuevo</span>
-              </button>
-              <p className="text-gray-400">
-                O también puedes{' '}
-                <a href="/login" className="text-primary hover:text-primary-hover underline">
-                  Iniciar sesión
-                </a>
-              </p>
-            </div>
           </div>
         </div>
       </div>
@@ -228,6 +235,7 @@ const Home = () => {
                     course={course}
                     onEnroll={handleEnroll}
                     showEnrollButton={isAuthenticated}
+                    isEnrolled={isUserEnrolled(course.id)}
                   />
                 </div>
               ))}

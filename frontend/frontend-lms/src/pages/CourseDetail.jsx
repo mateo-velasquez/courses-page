@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
-
 import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
 import Alert from '../components/Alert.jsx';
@@ -146,7 +145,7 @@ const CourseDetail = () => {
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
-
+    
     if (!userSubscription) {
       setAlert({ type: 'warning', message: 'Debes estar inscrito para dejar comentarios' });
       return;
@@ -256,14 +255,9 @@ const CourseDetail = () => {
     return stars;
   };
 
-  const getCommentsWithRatings = () =>
-    subscriptions.filter(
-      (sub) => sub.comment && sub.comment.trim() !== ''
-    );
-
-  // ==========================
-  //   ESTADOS GENERALES
-  // ==========================
+  const getCommentsWithRatings = () => {
+    return subscriptions.filter(sub => sub.comment && sub.comment.trim() !== '');
+  };
 
   if (isLoading) {
     return (
@@ -319,18 +313,14 @@ const CourseDetail = () => {
                 </div>
               )}
               <Card.Body>
-                <h1 className="text-3xl font-bold mb-4">
-                  {course.course_name}
-                </h1>
-
+                <h1 className="text-3xl font-bold mb-4">{course.course_name}</h1>
+                
                 <div className="flex items-center gap-6 mb-6 text-sm text-gray">
                   <span>Duración: {course.duration}</span>
                   <span>Inicio: {formatDate(course.init_date)}</span>
                   <div className="flex items-center gap-1">
                     {renderStars(Math.round(course.rating))}
-                    <span className="ml-2">
-                      ({course.rating.toFixed(1)})
-                    </span>
+                    <span className="ml-2">({course.rating.toFixed(1)})</span>
                   </div>
                 </div>
 
@@ -367,19 +357,13 @@ const CourseDetail = () => {
                 <Card.Body>
                   <div className="space-y-4">
                     {commentsWithRatings.map((subscription) => (
-                      <div
-                        key={subscription.id}
-                        className="border-b border-gray-200 pb-4 last:border-b-0"
-                      >
+                      <div key={subscription.id} className="border-b border-gray-200 pb-4 last:border-b-0">
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex">
                             {renderStars(subscription.individual_rating)}
                           </div>
                           <span className="text-sm text-gray">
-                            {formatDate(
-                              subscription.last_update_date ||
-                                subscription.create_date
-                            )}
+                            {formatDate(subscription.last_update_date || subscription.create_date)}
                           </span>
                         </div>
                         <p className="text-white">{subscription.comment}</p>
@@ -485,18 +469,13 @@ const CourseDetail = () => {
 
                 {isAuthenticated ? (
                   userSubscription ? (
-                    <div className="text-center">
-                      <div className="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
-                        ✅ Ya estás inscrito en este curso
-                      </div>
-                      <Button
-                        onClick={() => navigate('/my-courses')}
-                        variant="outline"
-                        className="w-full"
-                      >
-                        Ver Mis Cursos
-                      </Button>
-                    </div>
+                    <button
+                      disabled
+                      className="w-full px-4 py-2 rounded-lg text-white font-medium cursor-not-allowed"
+                      style={{ backgroundColor: 'var(--color-gray-300)' }}
+                    >
+                      Ya te has inscripto a este curso
+                    </button>
                   ) : (
                     <Button
                       onClick={handleEnroll}
