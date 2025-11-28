@@ -33,10 +33,7 @@ export const subscriptionService = {
   updateRating: async (subscriptionId, rating) => {
     return await apiRequest(`/course/subscription/rating/${subscriptionId}`, {
       method: 'PUT',
-      body: JSON.stringify({ 
-        id: subscriptionId,
-        individual_rating: parseFloat(rating)
-      }),
+      body: JSON.stringify({ individual_rating: rating }),
     });
   },
 
@@ -44,10 +41,7 @@ export const subscriptionService = {
   updateComment: async (subscriptionId, comment) => {
     return await apiRequest(`/course/subscription/comment/${subscriptionId}`, {
       method: 'PUT',
-      body: JSON.stringify({ 
-        id: subscriptionId,
-        comment: comment 
-      }),
+      body: JSON.stringify({ comment }),
     });
   },
 };

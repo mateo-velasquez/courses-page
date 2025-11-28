@@ -95,19 +95,16 @@ func PutRating(subscription model.Subscription) model.Subscription {
 		return subscription
 	}
 
-	// Actualizamos solo el rating usando Updates con WHERE explícito
-	change := Db.Model(&model.Subscription{}).Where("subscription_id = ?", subscription.IDSubscription).Updates(map[string]interface{}{
-		"individual_rating": subscription.IndividualRating,
-	})
+	// Actualizamos solo el rating
+	original.IndividualRating = subscription.IndividualRating
 
+	// Guardamos el cambio
+	change := Db.Model(&original).Update("individual_rating", subscription.IndividualRating)
 	if change.Error != nil {
-		log.Error("Failed to Update Subscription: ", change.Error)
+		log.Error("Failed to Save Subscription.")
 		subscription.IDSubscription = -2
 		return subscription
 	}
-
-	// Recargamos el objeto actualizado para obtener lastupdate_date actualizado
-	Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
 
 	// Devolvemos el objeto actualizado
 	return original
@@ -125,19 +122,16 @@ func PutComment(subscription model.Subscription) model.Subscription {
 		return subscription
 	}
 
-	// Actualizamos solo el comentario usando Updates con WHERE explícito
-	change := Db.Model(&model.Subscription{}).Where("subscription_id = ?", subscription.IDSubscription).Updates(map[string]interface{}{
-		"comment": subscription.Comment,
-	})
+	// Actualizamos solo el rating
+	original.Comment = subscription.Comment
 
+	// Guardamos el cambio
+	change := Db.Model(&original).Update("comment", subscription.Comment)
 	if change.Error != nil {
-		log.Error("Failed to Update Subscription: ", change.Error)
+		log.Error("Failed to Save Subscription.")
 		subscription.IDSubscription = -2
 		return subscription
 	}
-
-	// Recargamos el objeto actualizado para obtener lastupdate_date actualizado
-	Db.Where("subscription_id = ?", subscription.IDSubscription).First(&original)
 
 	// Devolvemos el objeto actualizado
 	return original

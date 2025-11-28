@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import Card from '../components/Card.jsx';
@@ -20,12 +20,11 @@ const Login = () => {
   const location = useLocation();
 
   // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, { replace: true });
-    }
-  }, [isAuthenticated, navigate, location]);
+  if (isAuthenticated) {
+    const from = location.state?.from?.pathname || '/';
+    navigate(from, { replace: true });
+    return null;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
