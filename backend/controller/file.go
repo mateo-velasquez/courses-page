@@ -13,6 +13,14 @@ import (
 )
 
 func InsertFile(c *gin.Context) {
+
+	subscription_id, er := strconv.Atoi(c.Param("id"))
+
+	if er != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get multipart form"})
+		return
+	}
+
 	// Obtiene el formulario enviado
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -41,13 +49,13 @@ func InsertFile(c *gin.Context) {
 		return
 	}
 
-	// Crea el DTO para guardar en la base de datos
-	fileDto := dto.FileDTO{
-		FilePath: savePath,
-	}
+	var fileDTO dto.FileDTO
+	fileDTO.FileName = fileName
+	fileDTO.FilePath = savePath
+	fileDTO.SubscriptionId = subscription_id
 
 	// Inserta la información de la filen en la base de datos
-	savedFileDto, err := service.FileService.InsertFile(fileDto)
+	savedFileDto, err := service.FileService.InsertFile(fileDTO)
 
 	// Comunicar si hubo un problema
 	if err != nil {
