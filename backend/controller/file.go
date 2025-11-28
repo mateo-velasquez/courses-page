@@ -5,7 +5,6 @@ import (
 	"project/dto"
 	"project/service"
 
-	"fmt"
 	"path/filepath"
 	"strconv"
 
@@ -39,8 +38,7 @@ func InsertFile(c *gin.Context) {
 	file := files[0]
 
 	// Genera el nombre del archivo con la extensión original
-	fileExtension := filepath.Ext(file.Filename)
-	fileName := fmt.Sprintf(file.Filename, fileExtension)
+	fileName := file.Filename
 
 	// Guarda el archivo en el directorio "Files/"
 	savePath := filepath.Join("files", fileName)
